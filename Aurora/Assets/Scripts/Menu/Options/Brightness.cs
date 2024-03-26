@@ -14,14 +14,14 @@ public class Brightness : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        slider.value = PlayerPrefs.GetFloat("brillo", clippingValue);
+        slider.value = PlayerPrefs.GetFloat("brightness", clippingValue);
         ligthScene.intensity = slider.value;
     }
 
-    public void CambiarDeslizador(float value)
+    public void ChangeValue(float value)
     {
         value = clippingValue;
-        PlayerPrefs.SetFloat("brillo", clippingValue);
+        PlayerPrefs.SetFloat("brightness", clippingValue);
         ligthScene.intensity = slider.value;
     }
 }

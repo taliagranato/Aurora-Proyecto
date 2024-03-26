@@ -27,47 +27,47 @@ public class ScreenOptions : MonoBehaviour
             isChecked.isOn = false;
         }
 
-        RevisarResolucion();
+        CheckResolution();
     }
 
-    public void ActivarPantallaCompleta(bool pantCompleta)
+    public void ActiveFullScreen(bool fullScreen)
     {
-        Screen.fullScreen = pantCompleta; // Poner pantalla completa
+        Screen.fullScreen = fullScreen; // Poner pantalla completa
     }
 
-    public void RevisarResolucion()
+    public void CheckResolution()
     {
         resolution = Screen.resolutions;
         resolutionDropDown.ClearOptions();
 
-        List<string> opciones = new List<string>();
-        int resolucionActual = 0;
+        List<string> options = new List<string>();
+        int actualResolution = 0;
 
         for (int i = 0; i < resolution.Length; i++)
         {
-            string opcion = resolution[i].width + " x " + resolution[i].height + " @ " + resolution[i].refreshRate + "hz";
-            opciones.Add(opcion);
+            string option = resolution[i].width + " x " + resolution[i].height + " @ ";
+            options.Add(option);
 
             if (Screen.fullScreen && resolution[i].width == Screen.currentResolution.width &&
                 resolution[i].height == Screen.currentResolution.height)
             {
-                resolucionActual = i;
+                actualResolution = i;
             }
         }
-        resolutionDropDown.AddOptions(opciones);
-        resolutionDropDown.value = resolucionActual;
+        resolutionDropDown.AddOptions(options);
+        resolutionDropDown.value = actualResolution;
         resolutionDropDown.RefreshShownValue();
 
-        resolutionDropDown.value = PlayerPrefs.GetInt("numeroResolucion", 0);
+        resolutionDropDown.value = PlayerPrefs.GetInt("numResolution", 0);
     }
 
     // Método para cambiar la resolucion
-    public void CambiarResolucion(int indiceResolucion)
+    public void ChangeResolution(int indiceResolution)
     {
         // Guardar el valor al volver a abrir el juego
-        PlayerPrefs.SetInt("numeroResolucion", resolutionDropDown.value);
+        PlayerPrefs.SetInt("numResolution", resolutionDropDown.value);
 
-        Resolution resolucion = resolution[indiceResolucion];
+        Resolution resolucion = resolution[indiceResolution];
         Screen.SetResolution(resolucion.width, resolucion.height, Screen.fullScreen);
     }
 }
