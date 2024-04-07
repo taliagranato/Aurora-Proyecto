@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : Player
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject bullet;
+    public GameObject fire_point;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Fire();
+        }
+    }
+
+    void Fire()
+    {
+        Instantiate(bullet, fire_point.transform.position, this.transform.rotation);
+        firing = 0;
     }
 }
