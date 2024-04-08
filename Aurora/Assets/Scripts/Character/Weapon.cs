@@ -6,6 +6,7 @@ public class Weapon : Player
 {
     public GameObject bullet;
     public GameObject fire_point;
+    public GameObject Camera;
 
     // Update is called once per frame
     void Update()
@@ -18,7 +19,7 @@ public class Weapon : Player
 
     void Fire()
     {
-        Instantiate(bullet, fire_point.transform.position, this.transform.rotation);
+        Instantiate(bullet, fire_point.transform.position, Camera.transform.rotation);
         firing = 0;
     }
 }

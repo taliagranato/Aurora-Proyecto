@@ -6,13 +6,18 @@ public class Bullet : MonoBehaviour
 {
     public Material color;
     Color random_color;
-
+    public Rigidbody rb;
+    public float speed;
+    public int damage; 
+    public Enemy enemy;
 
     // Start is called before the first frame update
     void Start()
     {
         AssignColor();
+        rb = GetComponent<Rigidbody>();
         color.SetColor("_Color", random_color);
+        rb.AddForce(this.transform.forward * speed);
     }
 
     // Update is called once per frame
@@ -26,4 +31,35 @@ public class Bullet : MonoBehaviour
         random_color = new Color(Random.Range(0.0f,1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f),1.0f);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("I hit: " + collision.gameObject.name);
+        if (collision.gameObject.tag == "Enemy")
+        {
+            enemy.Damage(damage);
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : Character
@@ -14,5 +15,10 @@ public class Enemy : Character
     void Update()
     {
         
+    }
+
+    public void Damage(int damage)
+    {
+        this.hp -= damage;
     }
 }
