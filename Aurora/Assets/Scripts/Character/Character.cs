@@ -5,8 +5,10 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public int hp;
+    public int hp_max;
     public float fire_rate;
     public float firing;
+
 
     protected void LateUpdate()
     {

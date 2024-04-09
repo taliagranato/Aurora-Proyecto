@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon : Player
 {
-    public GameObject bullet;
+   /* public GameObject bullet;
     public GameObject fire_point;
     public GameObject Camera;
 
@@ -22,4 +22,4 @@ public class Weapon : Player
         Instantiate(bullet, fire_point.transform.position, Camera.transform.rotation);
         firing = 0;
     }
-}
+*/}
