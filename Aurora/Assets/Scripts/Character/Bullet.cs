@@ -33,9 +33,10 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("I hit: " + collision.gameObject.name);
+        
         if (collision.gameObject.tag == "Enemy")
         {
+            Debug.Log("I hit: " + collision.gameObject.name);
             enemy.Damage(damage);
         }
     }

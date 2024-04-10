@@ -344,7 +344,16 @@ namespace StarterAssets
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity)
             {
-                _verticalVelocity += Gravity * Time.deltaTime;
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    _verticalVelocity += Gravity * 0.5f * Time.deltaTime;
+                }
+                else
+                {
+                    _verticalVelocity += Gravity * Time.deltaTime;
+                }
+
+                
             }
         }
 
