@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Enemy : Character
 {
+    public Vector3 dir;
     // Start is called before the first frame update
     void Start()
     {

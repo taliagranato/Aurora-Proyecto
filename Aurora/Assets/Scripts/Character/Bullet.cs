@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     public Rigidbody rb;
     public float speed;
     public int damage; 
-    public Enemy enemy;
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +23,12 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (rb.velocity != Vector3.zero) // Verifica si la flecha está cayendo
+        {
+            float rot = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+
+            transform.rotation = Quaternion.Euler(0, 0, rot);
+        }
     }
 
     private void AssignColor()
@@ -33,12 +38,8 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
-        if (collision.gameObject.tag == "Enemy")
-        {
-            Debug.Log("I hit: " + collision.gameObject.name);
-            enemy.Damage(damage);
-        }
+        Destroy(this.gameObject, 0.2f);
+
     }
 
 }
