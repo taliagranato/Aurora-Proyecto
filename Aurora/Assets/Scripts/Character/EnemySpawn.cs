@@ -15,25 +15,33 @@ public class EnemySpawn : MonoBehaviour
     // Los enemigos que salgan de este punto, tendran esta direccion
     public Vector3 dirSpawn = Vector3.right;
 
+    private Pause pauseScript;
+
     private void Start()
     {
         CalculoAleatorio();
+        pauseScript = GameObject.FindObjectOfType<Pause>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Actualizar el contador
-        cont += Time.deltaTime;
+        if (!pauseScript.isPaused)
+        { 
+            //Actualizar el contador
+            cont += Time.deltaTime;
 
-        if (cont > lim)
-        {
-            GameObject newEnemy = Instantiate(enemyPrefab, this.transform.position, this.transform.rotation);
-            newEnemy.GetComponent<Enemy>().dir = dirSpawn; // Actualizar dirección del enemigo creado
+            if (cont > lim)
+            {
+                GameObject newEnemy = Instantiate(enemyPrefab, this.transform.position, this.transform.rotation);
+                newEnemy.GetComponent<Enemy>().dir = dirSpawn; // Actualizar dirección del enemigo creado
 
-            cont = 0; // Volvemos el contador a 0
-            CalculoAleatorio();
+                cont = 0; // Volvemos el contador a 0
+                CalculoAleatorio();
+            }
+        
         }
+            
     }
 
     void CalculoAleatorio()

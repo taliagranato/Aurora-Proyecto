@@ -26,7 +26,7 @@ public class Player : Character
     public Image specialBulletFill; // Relleno para el sprite de la bala especial
     public float specialBulletFillDuration = 10f; // Duración en segundos para llenar el sprite de la bala especial
                                                   //  private bool isFiringSpecialBullet = false; // Indica si el jugador está disparando la bala especial
-
+    private Pause pauseScript;
 
     private void Awake()
     {
@@ -43,28 +43,32 @@ public class Player : Character
         InitializeBulletSprites();
         InitializeCollectSprites();
         StartCoroutine(SpecialBulletTimer());
-
+        pauseScript = GameObject.FindObjectOfType<Pause>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateBar(); // Actualizar barra de vida
-        if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            if (bullet_active > 0)
+        if (!pauseScript.isPaused)
+        { 
+            UpdateBar(); // Actualizar barra de vida
+            if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Fire();
-                bullet_active--;
-                UpdateBulletUI();
+                if (bullet_active > 0)
+                {
+                    Fire();
+                    bullet_active--;
+                    UpdateBulletUI();
+                }
+                else if (bullet_active <= 0)
+                    StartCoroutine(Reloading());
             }
-            else if (bullet_active <= 0)
-                StartCoroutine(Reloading());
+            if (Input.GetKeyDown(KeyCode.Q) && specialBulletReady)
+            {
+                FireSpecialBullet();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Q) && specialBulletReady)
-        {
-            FireSpecialBullet();
-        }
+        
 
     }
 

@@ -10,15 +10,12 @@ public class LogicOptions : MonoBehaviour
     void Start()
     {
         optionsPanel = GameObject.FindGameObjectWithTag("Options").GetComponent<Options>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ShowOptions();
-        }
     }
 
     public void ShowOptions()
