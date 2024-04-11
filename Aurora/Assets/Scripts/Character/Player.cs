@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Player : Character
 {
+
     public int score;
     private int bullet_max = 4;
     public int bullet_active;
@@ -36,10 +37,12 @@ public class Player : Character
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         score = 0;
         inici = true;
+       
         InitializeBulletSprites();
         InitializeCollectSprites();
         StartCoroutine(SpecialBulletTimer());

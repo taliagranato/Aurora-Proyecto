@@ -1,54 +1,114 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : Character
 {
     public Vector3 dir;
-    public float movementSpeed = 2f; // Velocidad de movimiento del enemigo
     public float floatSpeed = 1f; // Velocidad de flotación del enemigo
-
+    public float chaseRange = 10f; // Rango de distancia para comenzar a perseguir al jugador
+    public float updateDestinationInterval = 3f; // Intervalo para actualizar el destino del enemigo
+    public GameObject[] normalSprites; // Sprites normales del enemigo
+    public GameObject[] chaseSprites; // Sprites del enemigo cuando persigue al jugador
+    private NavMeshAgent agent; // Componente NavMeshAgent para mover al enemigo
     private Pause pauseScript;
-    // Start is called before the first frame update
-    void Start()
+    public GameObject player; // Referencia al transform del jugador
+    private bool isChasing = false; // Indica si el enemigo está persiguiendo al jugador
+
+    private void Start()
     {
         pauseScript = GameObject.FindObjectOfType<Pause>();
-        InvokeRepeating("ChangeDirection", 0f, 3f); // Cambia la dirección cada 3 segundos
+        agent = GetComponent<NavMeshAgent>();
 
+        InvokeRepeating("UpdateDestination", 0f, updateDestinationInterval); // Actualiza el destino cada cierto intervalo de tiempo
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!pauseScript.isPaused)
         {
-            Move();
-            Float();
+            // Vector de distancia entre el jugador y el enemigo
+            Vector3 distJugador = player.transform.position - transform.position;
+
+            RaycastHit resultadoRay;
+            Debug.DrawRay(transform.position, distJugador, Color.red);
+            if (distJugador.magnitude <= chaseRange) // Si está el jugador a rango del enemigo
+            {
+                if (Physics.Raycast(transform.position, distJugador, out resultadoRay))
+                {
+                    // Rayo colisiona con algo
+                    if (resultadoRay.transform.tag == "Player") // Que tiene línea de visión
+                    {
+                        if (!isChasing)
+                        {
+                            StartChasing(); // Comienza a perseguir al jugador
+                        }
+                        agent.SetDestination(player.transform.position); // Seguir al jugador
+                    }
+                    else
+                    {
+                        if (isChasing)
+                        {
+                            StopChasing(); // Deja de perseguir al jugador
+                        }
+                        UpdateDestination();
+                    }
+                }
+            }
+            else
+            {
+                if (isChasing)
+                {
+                    StopChasing(); // Deja de perseguir al jugador
+                }
+                UpdateDestination();
+            }
         }
     }
-    // Cambiar la dirección del movimiento aleatoriamente
-    private void ChangeDirection()
+
+    // Método para comenzar a perseguir al jugador
+    private void StartChasing()
     {
-        dir = Random.insideUnitSphere.normalized;
+        isChasing = true;
+        // Aquí puedes agregar código adicional que desees ejecutar al comenzar a perseguir
     }
 
-    // Mover el enemigo en la dirección aleatoria
-    private void Move()
+    // Método para dejar de perseguir al jugador
+    private void StopChasing()
     {
-        transform.Translate(dir * movementSpeed * Time.deltaTime);
+        isChasing = false;
+        // Aquí puedes agregar código adicional que desees ejecutar al dejar de perseguir
+    }
+
+    // Actualiza el destino del enemigo
+    private void UpdateDestination()
+    {
+        Vector3 randomPosition = GetRandomNavMeshPosition();
+        agent.SetDestination(randomPosition);
+        //Float();
+    }
+
+    // Obtener un punto aleatorio dentro de la NavMesh
+    private Vector3 GetRandomNavMeshPosition()
+    {
+        NavMeshHit hit;
+        Vector3 randomPosition = transform.position + Random.insideUnitSphere * 10f; // Genera un punto aleatorio cerca del enemigo
+        NavMesh.SamplePosition(randomPosition, out hit, 10f, NavMesh.AllAreas); // Ajusta el radio según el tamaño de tu NavMesh
+        return hit.position;
     }
 
     // Simular el efecto de flotación
-    private void Float()
-    {
-        // Aplica un movimiento sinusoidal en la posición vertical
-        float yOffset = Mathf.Sin(Time.time * floatSpeed) * 0.2f; // La amplitud determina la altura de la flotación
-        transform.position += Vector3.up * yOffset * Time.deltaTime;
-    }
+    /* private void Float()
+     {
+         // Aplica un movimiento sinusoidal en la posición vertical
+         float yOffset = Mathf.Sin(Time.time * floatSpeed) * 0.2f; // La amplitud determina la altura de la flotación
+         transform.position += Vector3.up * yOffset * Time.deltaTime;
+     }*/
 
     public void Damage(int damage)
     {
         hp -= damage;
     }
 }
+
