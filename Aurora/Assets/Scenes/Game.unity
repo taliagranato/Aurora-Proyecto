@@ -2978,6 +2978,7 @@ GameObject:
   - component: {fileID: 220329862}
   - component: {fileID: 220329861}
   - component: {fileID: 220329860}
+  - component: {fileID: 220329863}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -3059,6 +3060,37 @@ Transform:
   m_Father: {fileID: 1972098821}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &220329863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220329859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 1
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: c77862d942f486a498e812b3b91a8e9c, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1001 &224568621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27797,6 +27829,7 @@ GameObject:
   - component: {fileID: 1868933814}
   - component: {fileID: 1868933818}
   - component: {fileID: 1868933813}
+  - component: {fileID: 1868933819}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -27821,6 +27854,8 @@ MonoBehaviour:
   fire_rate: 0
   firing: 0
   dir: {x: 2, y: 0, z: 0}
+  movementSpeed: 2
+  floatSpeed: 1
 --- !u!65 &1868933814
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27885,6 +27920,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &1868933819
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868933812}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.37
+  m_BaseOffset: 0.37
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1870398861
 GameObject:
   m_ObjectHideFlags: 0
