@@ -9,6 +9,87 @@ public class Enemy : Character
     public float floatSpeed = 1f; // Velocidad de flotación del enemigo
     public float chaseRange = 10f; // Rango de distancia para comenzar a perseguir al jugador
     public float updateDestinationInterval = 3f; // Intervalo para actualizar el destino del enemigo
+    private NavMeshAgent agent; // Componente NavMeshAgent para mover al enemigo
+    private Pause pauseScript;
+    public GameObject player; // Referencia al transform del jugador
+   // private bool isChasing = false; // Indica si el enemigo está persiguiendo al jugador
+
+    protected override void Start()
+    {
+        base.Start();
+        pauseScript = GameObject.FindObjectOfType<Pause>();
+        agent = GetComponent<NavMeshAgent>();
+
+        InvokeRepeating("UpdateDestination", 0f, updateDestinationInterval); // Actualiza el destino cada cierto intervalo de tiempo
+    }
+
+    private void Update()
+    {
+        if (!pauseScript.isPaused)
+        {
+            // Vector de distanci entre el jugador y el enemigo
+            Vector3 distJugador = player.transform.position - this.transform.position;
+
+            RaycastHit resultadoRay;
+            Debug.DrawRay(transform.position, distJugador, Color.red);
+            if (distJugador.magnitude <= chaseRange) // Si está el jugador a rango del enemigo
+            {
+                if (Physics.Raycast(this.transform.position, distJugador, out resultadoRay))
+                {
+                    // Rayo colisiona con algo
+                    if (resultadoRay.transform.tag == "Player") // Que tiene linea de visión
+                    {
+                        Debug.Log("Persiguiendo al jugador");
+                        agent.SetDestination(player.transform.position); // Seguir al jugador
+
+                    }
+                    else
+                    {
+                        UpdateDestination();
+                    }
+                }
+            }
+
+        }
+    }
+
+    // Actualiza el destino del enemigo
+    private void UpdateDestination()
+    {
+        Vector3 randomPosition = GetRandomNavMeshPosition();
+        agent.SetDestination(randomPosition);
+        //Float();
+
+    }
+
+    // Obtener un punto aleatorio dentro de la NavMesh
+    private Vector3 GetRandomNavMeshPosition()
+    {
+        NavMeshHit hit;
+        Vector3 randomPosition = transform.position + Random.insideUnitSphere * 10f; // Genera un punto aleatorio cerca del enemigo
+        NavMesh.SamplePosition(randomPosition, out hit, 10f, NavMesh.AllAreas); // Ajusta el radio según el tamaño de tu NavMesh
+        return hit.position;
+    }
+
+    // Simular el efecto de flotación
+    /* private void Float()
+     {
+         // Aplica un movimiento sinusoidal en la posición vertical
+         float yOffset = Mathf.Sin(Time.time * floatSpeed) * 0.2f; // La amplitud determina la altura de la flotación
+         transform.position += Vector3.up * yOffset * Time.deltaTime;
+     }*/
+
+
+    public void Damage(int damage)
+    {
+        hp -= damage;
+    }
+}
+/*
+    public Vector3 dir;
+    public float floatSpeed = 1f; // Velocidad de flotación del enemigo
+    public float chaseRange = 10f; // Rango de distancia para comenzar a perseguir al jugador
+    public float updateDestinationInterval = 3f; // Intervalo para actualizar el destino del enemigo
     public GameObject[] normalSprites; // Sprites normales del enemigo
     public GameObject[] chaseSprites; // Sprites del enemigo cuando persigue al jugador
     private NavMeshAgent agent; // Componente NavMeshAgent para mover al enemigo
@@ -16,7 +97,7 @@ public class Enemy : Character
     public GameObject player; // Referencia al transform del jugador
     private bool isChasing = false; // Indica si el enemigo está persiguiendo al jugador
 
-    private void Start()
+    protected override void Start()
     {
         pauseScript = GameObject.FindObjectOfType<Pause>();
         agent = GetComponent<NavMeshAgent>();
@@ -104,11 +185,11 @@ public class Enemy : Character
          // Aplica un movimiento sinusoidal en la posición vertical
          float yOffset = Mathf.Sin(Time.time * floatSpeed) * 0.2f; // La amplitud determina la altura de la flotación
          transform.position += Vector3.up * yOffset * Time.deltaTime;
-     }*/
+     }
 
-    public void Damage(int damage)
+public void Damage(int damage)
     {
         hp -= damage;
     }
-}
+}*/
 

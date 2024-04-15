@@ -7,14 +7,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject controlsWindow;
     public GameObject optionsWindow;
-
+    public GameObject controlsWindow;
     // Start is called before the first frame update
     void Start()
     {
+        optionsWindow.SetActive(false);
         controlsWindow.SetActive(false);
-        optionsWindow.SetActive(false); 
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) OptionsOn();
+
     }
 
     // Método que hace el fade y carga la escena 01
@@ -24,24 +29,26 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Empieza el juego");
         fadeScript.StartFade("Game");
     }
-
-    // Método que muestra los controles
-    public void ControlsOn()
+    // Método que hace el fade y carga la escena 01
+    public void Menu()
     {
-        controlsWindow.SetActive(true);
+        FadeOut fadeScript = FindObjectOfType<FadeOut>();
+        Debug.Log("Volver al menu.");
+        fadeScript.StartFade("Title Screen");
     }
-    
+
     // Método que muestran las opciones
     public void OptionsOn()
     {
         optionsWindow.SetActive(true);
+        controlsWindow.SetActive(true);
     }
 
     // Método que cierra las ventanas 
     public void WindowsOff()
     {
-        controlsWindow.SetActive(false);
         optionsWindow.SetActive(false);
+        controlsWindow.SetActive(false);
     }
 
     // Método que cierra el juego
