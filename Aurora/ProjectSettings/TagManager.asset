@@ -10,6 +10,7 @@ TagManager:
   - Collectable
   - Damage
   - Bullet
+  - Enviroment
   layers:
   - Default
   - TransparentFX

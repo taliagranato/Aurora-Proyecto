@@ -6,10 +6,13 @@ public class Bullet : MonoBehaviour
 {
     public Material color;
     Color random_color;
+    Color saved_color;
     public Rigidbody rb;
     public float speed;
     public int damage;
     Enemy enemy_hit;
+
+    public GameObject paint;
 
 
     // Start is called before the first frame update
@@ -17,7 +20,7 @@ public class Bullet : MonoBehaviour
     {
         AssignColor();
         rb = GetComponent<Rigidbody>();
-        color.SetColor("_Color", random_color);
+        color.SetColor("_BaseColor", random_color);
         rb.AddForce(this.transform.forward * speed);
     }
 
@@ -35,6 +38,7 @@ public class Bullet : MonoBehaviour
     private void AssignColor()
     {
         random_color = new Color(Random.Range(0.0f,1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f),1.0f);
+        saved_color = random_color;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -45,7 +49,16 @@ public class Bullet : MonoBehaviour
             enemy_hit = collision.gameObject.GetComponent<Enemy>();
             enemy_hit.Damage(this.damage);
         }
-        Destroy(this.gameObject, 0.1f);
+        else
+        {
+            GameObject paintSplash = Instantiate(paint, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
+            paintSplash.transform.position += paintSplash.transform.forward / 1000;
+            paintSplash.GetComponent<Paint>().SetColor(saved_color);
+            
+        }
+        Destroy(this.gameObject);
+
+
 
     }
 

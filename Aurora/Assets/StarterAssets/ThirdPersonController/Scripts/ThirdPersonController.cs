@@ -77,6 +77,14 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Tooltip("The FOV of the camera")]
+        public float StartFOV = 50;
+
+        [Tooltip("The FOV of the camera when aiming")]
+        public float AimingFov = 40;
+
+
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -174,14 +182,22 @@ namespace StarterAssets
 
         private void Aiming()
         {
+
+
             CinemachineVirtualCamera virtualCamera = _cameraFollow.GetComponent<CinemachineVirtualCamera>();
             if (_input.aiming && !_input.sprint)
             {
-                virtualCamera.m_Lens.FieldOfView = 30;
+                if (virtualCamera.m_Lens.FieldOfView > AimingFov)
+                {
+                    virtualCamera.m_Lens.FieldOfView -= 10 * Time.deltaTime;
+                }
             }
             else
             {
-                virtualCamera.m_Lens.FieldOfView = 50;
+                if (virtualCamera.m_Lens.FieldOfView < StartFOV)
+                {
+                    virtualCamera.m_Lens.FieldOfView += 20 * Time.deltaTime;
+                }
             }
         }
 
