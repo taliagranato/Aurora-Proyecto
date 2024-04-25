@@ -9,6 +9,7 @@ TagManager:
   - Options
   - Collectable
   - Damage
+  - Bullet
   layers:
   - Default
   - TransparentFX

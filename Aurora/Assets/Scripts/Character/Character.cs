@@ -8,8 +8,8 @@ public class Character : MonoBehaviour
     public int hp_max;
     public float fire_rate;
     public float firing;
-    public bool playerBool;// variable que guarda la posición inicial del jugador
-    public Vector3 initialPos;
+    public bool playerBool;
+    public Vector3 initialPos;// variable que guarda la posición inicial del jugador
 
     protected virtual void Start()
     {
@@ -18,6 +18,7 @@ public class Character : MonoBehaviour
         initialPos = player.transform.position;
         // Ajustar la posición inicial según el tamaño del collider del jugador
         Collider playerCollider = player.GetComponent<Collider>();
+        hp = hp_max;
         if (playerCollider != null)
         {
             initialPos.y += playerCollider.bounds.extents.y; // Ajustar según el tamaño del collider
@@ -35,9 +36,24 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerBool && hp <= 0) 
+
+    }
+
+    public void IsDead()
+    {
+        if (this.hp <= 0)
         {
-            Death();
+            Debug.Log("a");
+            if (this.playerBool)
+            {
+                Death();
+            }
+            else
+            {
+                Debug.Log("Enemy dies");
+                Destroy(this.gameObject, 0.1f);
+            }
+
         }
     }
 
@@ -53,7 +69,7 @@ public class Character : MonoBehaviour
         { 
             StartCoroutine(Reaparecer());
             
-        }      
+        }
        Debug.Log(this.name + " dies");
     }
     IEnumerator Reaparecer()
@@ -65,6 +81,7 @@ public class Character : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
+            hp = hp_max;
             player.transform.position = initialPos;
         }
     }

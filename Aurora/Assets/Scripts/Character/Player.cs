@@ -71,6 +71,7 @@ public class Player : Character
                 FireSpecialBullet();
             }
         }
+        this.IsDead();
         
 
     }

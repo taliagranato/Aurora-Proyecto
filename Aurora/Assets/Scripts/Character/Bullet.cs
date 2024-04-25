@@ -8,7 +8,8 @@ public class Bullet : MonoBehaviour
     Color random_color;
     public Rigidbody rb;
     public float speed;
-    public int damage; 
+    public int damage;
+    Enemy enemy_hit;
 
 
     // Start is called before the first frame update
@@ -38,6 +39,12 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Enemy hit");
+            enemy_hit = collision.gameObject.GetComponent<Enemy>();
+            enemy_hit.Damage(this.damage);
+        }
         Destroy(this.gameObject, 0.1f);
 
     }

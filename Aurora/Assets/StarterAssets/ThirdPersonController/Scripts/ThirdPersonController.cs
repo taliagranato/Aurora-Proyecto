@@ -1,4 +1,6 @@
-﻿ using UnityEngine;
+﻿using Cinemachine;
+using Cinemachine.Editor;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -78,6 +80,7 @@ namespace StarterAssets
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
+        public GameObject _cameraFollow;
 
         // player
         private float _speed;
@@ -135,6 +138,7 @@ namespace StarterAssets
 
         private void Start()
         {
+            _cameraFollow = GameObject.Find("PlayerFollowCamera");
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             pauseScript = GameObject.FindObjectOfType<Pause>();
             _hasAnimator = TryGetComponent(out _animator);
@@ -162,10 +166,25 @@ namespace StarterAssets
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
+                Aiming();
 
             }
                 
         }
+
+        private void Aiming()
+        {
+            CinemachineVirtualCamera virtualCamera = _cameraFollow.GetComponent<CinemachineVirtualCamera>();
+            if (_input.aiming && !_input.sprint)
+            {
+                virtualCamera.m_Lens.FieldOfView = 30;
+            }
+            else
+            {
+                virtualCamera.m_Lens.FieldOfView = 50;
+            }
+        }
+
 
         private void LateUpdate()
         {

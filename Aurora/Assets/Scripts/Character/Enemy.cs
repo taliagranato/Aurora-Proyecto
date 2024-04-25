@@ -19,7 +19,7 @@ public class Enemy : Character
         base.Start();
         pauseScript = GameObject.FindObjectOfType<Pause>();
         agent = GetComponent<NavMeshAgent>();
-
+        player = GameObject.Find("PlayerCapsule");
         InvokeRepeating("UpdateDestination", 0f, updateDestinationInterval); // Actualiza el destino cada cierto intervalo de tiempo
     }
 
@@ -51,6 +51,7 @@ public class Enemy : Character
             }
 
         }
+        this.IsDead();
     }
 
     // Actualiza el destino del enemigo
@@ -84,6 +85,16 @@ public class Enemy : Character
     {
         hp -= damage;
     }
+
+    /*
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "bullet")
+        {
+            Debug.Log("Enemy Damaged");
+        }
+    }*/
+
 }
 /*
     public Vector3 dir;
