@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2681056756737519551
 MeshFilter:
@@ -148,5 +148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {fileID: 2100000, guid: d053df8f7562a984ca10aed19cf6c1e8, type: 2}
   rb: {fileID: 8283721048796847387}
-  speed: 1000
+  speed: 2000
   damage: 30
+  paint: {fileID: 4014822434866457179, guid: e7c730ea7e2cc73489e724ee6eaae088, type: 3}

@@ -3,37 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using StarterAssets;
 
 public class Player : Character
 {
-
     public int score;
     private int bullet_max = 4;
     public int bullet_active;
-    private int max_collectibles = 8;
 
     public Image bar; // Rellenador barra de vida
     public Image[] bulletSprites; // Lista de los sprites para las balas
-    public Image[] collectableSprites; // Lista de los sprites para las balas
-    private bool inici = true;
-    private bool tocat = false;
-
+   
+  private GameObject activeDescriptionText; // Almacena el texto de descripción activo actualmente
+    
     public GameObject bullet;
     public GameObject specialBulletPrefab; // Prefab de la bala especial
     public GameObject fire_point;
     public GameObject Camera;
-
+    
+    private bool recharging;
     private bool specialBulletReady = false; // Indica si la bala especial está lista
     public Image specialBulletFill; // Relleno para el sprite de la bala especial
     public float specialBulletFillDuration = 10f; // Duración en segundos para llenar el sprite de la bala especial
                                                   //  private bool isFiringSpecialBullet = false; // Indica si el jugador está disparando la bala especial
-    private Pause pauseScript;
+    public Pause pauseScript;
+
+    public ThirdPersonController _thirdPersonController; // Referencia al script ThirdPersonController
+    public SpriteRenderer _spriteRenderer; // Referencia al componente SpriteRenderer del jugador
+
 
     private void Awake()
     {
         hp_max = 100;
         hp = hp_max;
         bullet_active = bullet_max;
+        recharging = false;
     }
 
     // Start is called before the first frame update
@@ -41,12 +45,10 @@ public class Player : Character
     {
         base.Start();
         score = 0;
-        inici = true;
-       
         InitializeBulletSprites();
-        InitializeCollectSprites();
         StartCoroutine(SpecialBulletTimer());
         pauseScript = GameObject.FindObjectOfType<Pause>();
+
     }
 
     // Update is called once per frame
@@ -55,7 +57,7 @@ public class Player : Character
         if (!pauseScript.isPaused)
         { 
             UpdateBar(); // Actualizar barra de vida
-            if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0))
+            if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0) && !recharging)
             {
                 if (bullet_active > 0)
                 {
@@ -70,12 +72,48 @@ public class Player : Character
             {
                 FireSpecialBullet();
             }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                StartCoroutine(Reloading());
+            }
+            if (_thirdPersonController != null)
+            {
+                // Obtener la dirección del movimiento del ThirdPersonController
+                float moveDirectionX = _thirdPersonController.MoveDirection.x;
+
+                // Escalar el sprite del jugador según la dirección del movimiento
+                if (moveDirectionX > 0) // Movimiento hacia la derecha
+                {
+                    ScalePlayerAndFirePoint(1);
+                }
+                else if (moveDirectionX < 0) // Movimiento hacia la izquierda
+                {
+                    ScalePlayerAndFirePoint(moveDirectionX);
+                }
+            }
         }
-        this.IsDead();
         
+        this.IsDead();   
 
     }
+    // Método para ajustar la escala del jugador y del punto de disparo
+    void ScalePlayerAndFirePoint(float direction)
+    {
+        // Obtener la escala actual del jugador y del punto de disparo
+        Vector3 playerScale = transform.localScale;
+        Vector3 firePointScale = fire_point.transform.localScale;
 
+        // Calcular la nueva escala en función de la dirección
+        float newScaleX = direction > 0 ? 1f : -1f;
+
+        // Aplicar la nueva escala al jugador y al punto de disparo
+        playerScale.x = newScaleX;
+        firePointScale.x = newScaleX;
+
+        // Establecer la escala actualizada
+        transform.localScale = playerScale;
+        fire_point.transform.localScale = firePointScale;
+    }
     // Iniciacion Sprites
     void InitializeBulletSprites()
     {
@@ -87,16 +125,6 @@ public class Player : Character
         UpdateBulletUI();
     }
 
-    void InitializeCollectSprites()
-    {
-        collectableSprites = new Image[max_collectibles];
-        for (int i = 0; i < max_collectibles; i++)
-        {
-            collectableSprites[i] = GameObject.Find("Collectible" + (i + 1)).GetComponent<Image>();
-        }
-        UpdateCollectUI();
-
-    }
     // Update Sprites
     void UpdateBulletUI()
     {
@@ -106,50 +134,21 @@ public class Player : Character
 
             if (i < bullet_active)
             {
-                float saturation = 1f; // Componente de saturación
+                float value = 1f; // Componente de saturación
                 Color.RGBToHSV(newColor, out float h, out float s, out float v); // Convertir el color a HSV
-                s = saturation; // Ajustar la saturación
+                v = value; // Ajustar la saturación
                 newColor = Color.HSVToRGB(h, s, v);
                 newColor.a = 1f; // Mantener la opacidad completa
             }
             else
             {
-                float saturation = 0.3f;
+                float value = 0.3f;
                 Color.RGBToHSV(newColor, out float h, out float s, out float v);
-                s = saturation;
+                v = value;
                 newColor = Color.HSVToRGB(h, s, v);
                 newColor.a = 0.8f; // Reducir la opacidad para las balas inactivas
             }
             bulletSprites[i].color = newColor;
-        }
-    }
-
-    void UpdateCollectUI()
-    {
-        for (int i = 0; i < max_collectibles; i++)
-        {
-            Color newColor = collectableSprites[i].color;
-
-            if (inici)
-            {
-              //  float saturation = 0.2f; // Componente de saturación
-                Color.RGBToHSV(newColor, out float h, out float s, out float v); // Convertir el color a HSV
-               // s = saturation; // Ajustar la saturación
-                v = 0.2f;
-                newColor = Color.HSVToRGB(h, s, v);
-                newColor.a = 0.8f; // Mantener la opacidad completa
-            }
-            if (tocat)
-            {
-                //float saturation = 1f;
-                Color.RGBToHSV(newColor, out float h, out float s, out float v);
-               // s = saturation;
-                v = 1f;
-                newColor = Color.HSVToRGB(h, s, v);
-                newColor.a = 1f; // Reducir la opacidad para las balas inactivas
-                tocat = false;
-            }
-            collectableSprites[i].color = newColor;
         }
     }
 
@@ -165,6 +164,7 @@ public class Player : Character
     void Fire()
     {
         Instantiate(bullet, fire_point.transform.position, Camera.transform.rotation);
+
         firing = 0;
     }
 
@@ -177,8 +177,7 @@ public class Player : Character
             score++;
             Debug.Log("Score: " + score);
             Destroy(other.gameObject);
-            tocat = true;
-            UpdateCollectUI();
+            Collectable.Instance.OnCollectibleTriggered(other.gameObject);
         }
         if (other.tag == "Damage")
         {
@@ -221,7 +220,6 @@ public class Player : Character
         StartCoroutine(SpecialBulletTimer());
     }
 
-
     // Método para actualizar el relleno del sprite de la bala especial
     void UpdateSpecialBulletFill(float fillAmount)
     {
@@ -230,9 +228,11 @@ public class Player : Character
 
     IEnumerator Reloading()
     {
+        recharging = true;
         Debug.Log("Recharging...");
         yield return new WaitForSeconds(2f);
         bullet_active = bullet_max;
         UpdateBulletUI(); // Asegurar que los sprites se actualizan después de recargar
+        recharging = false;
     }
 }

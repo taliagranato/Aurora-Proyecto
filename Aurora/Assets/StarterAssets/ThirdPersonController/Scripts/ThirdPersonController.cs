@@ -121,7 +121,7 @@ namespace StarterAssets
 
         private bool _hasAnimator;
         private Pause pauseScript;
-
+        public Vector2 MoveDirection { get; private set; } // Variable que almacena la dirección del movimiento
         private bool IsCurrentDeviceMouse
         {
             get
@@ -175,7 +175,7 @@ namespace StarterAssets
                 GroundedCheck();
                 Move();
                 Aiming();
-
+                UpdateMoveDirection();
             }
                 
         }
@@ -397,7 +397,16 @@ namespace StarterAssets
                 
             }
         }
+        // Método para actualizar la dirección del movimiento
+        private void UpdateMoveDirection()
+        {
+            // Obtener la entrada de movimiento en los ejes horizontal y vertical
+            float moveX = Input.GetAxisRaw("Horizontal");
+            float moveY = Input.GetAxisRaw("Vertical");
 
+            // Normalizar la dirección del movimiento
+            MoveDirection = new Vector2(moveX, moveY).normalized;
+        }
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
             if (lfAngle < -360f) lfAngle += 360f;
