@@ -4,48 +4,56 @@ using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
+    [System.Serializable]
+    public class SpawnPointInfo
+    {
+        public Transform spawnPoint; // Punto de spawn para los enemigos
+        public int maxEnemiesPerSpawnPoint = 3; // Máximo de enemigos activos permitidos por punto de spawn
+        public float spawnIntervalMin = 2f; // Intervalo mínimo entre spawns de enemigos
+        public float spawnIntervalMax = 5f; // Intervalo máximo entre spawns de enemigos
+
+        [HideInInspector]
+        public List<GameObject> activeEnemies = new List<GameObject>(); // Lista de enemigos activos en este punto de spawn
+    }
+
     public GameObject enemyPrefab;
-
-    public float cont;
-    public float lim = 2;
-
-    public int min = 1;
-    public int max = 10;
-
-    // Los enemigos que salgan de este punto, tendran esta direccion
-    public Vector3 dirSpawn = Vector3.right;
-
-    private Pause pauseScript;
+    public List<SpawnPointInfo> spawnPointsInfo; // Información sobre los puntos de spawn para los enemigos
 
     private void Start()
     {
-        CalculoAleatorio();
-        pauseScript = GameObject.FindObjectOfType<Pause>();
+        StartCoroutine(SpawnEnemiesRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator SpawnEnemiesRoutine()
     {
-        if (!pauseScript.isPaused)
-        { 
-            //Actualizar el contador
-            cont += Time.deltaTime;
-
-            if (cont > lim)
+        while (true)
+        {
+            foreach (var spawnPointInfo in spawnPointsInfo)
             {
-                GameObject newEnemy = Instantiate(enemyPrefab, this.transform.position, this.transform.rotation);
-                newEnemy.GetComponent<Enemy>().dir = dirSpawn; // Actualizar dirección del enemigo creado
-
-                cont = 0; // Volvemos el contador a 0
-                CalculoAleatorio();
+                if (spawnPointInfo.activeEnemies.Count < spawnPointInfo.maxEnemiesPerSpawnPoint)
+                {
+                    yield return new WaitForSeconds(Random.Range(spawnPointInfo.spawnIntervalMin, spawnPointInfo.spawnIntervalMax));
+                    SpawnEnemy(spawnPointInfo);
+                }
             }
-        
+            yield return null;
         }
-            
     }
 
-    void CalculoAleatorio()
+    void SpawnEnemy(SpawnPointInfo spawnPointInfo)
     {
-        lim = Random.Range(min, max);
+        // Verificar si ya se alcanzó el máximo de enemigos por punto de spawn
+        if (spawnPointInfo.activeEnemies.Count < spawnPointInfo.maxEnemiesPerSpawnPoint)
+        {
+            GameObject newEnemy = Instantiate(enemyPrefab, spawnPointInfo.spawnPoint.position, spawnPointInfo.spawnPoint.rotation);
+            spawnPointInfo.activeEnemies.Add(newEnemy);
+
+            // Suscribirnos al evento OnDeath del nuevo enemigo y eliminarlo de la lista de enemigos activos cuando muera
+            Enemy enemyComponent = newEnemy.GetComponent<Enemy>();
+            if (enemyComponent != null)
+            {
+                enemyComponent.OnDeath += () => { spawnPointInfo.activeEnemies.Remove(newEnemy); };
+            }
+        }
     }
 }

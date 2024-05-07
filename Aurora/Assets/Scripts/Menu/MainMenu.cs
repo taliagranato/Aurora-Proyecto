@@ -9,6 +9,9 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject optionsWindow;
     public GameObject controlsWindow;
+    private bool windowsActive = false; // Variable para controlar el estado de las ventanas
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +21,18 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) OptionsOn();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Alternar la visibilidad de las ventanas cuando se presiona Escape
+            if (windowsActive)
+            {
+                WindowsOff();
+            }
+            else
+            {
+                OptionsOn();
+            }
+        }
 
     }
 
@@ -42,6 +56,7 @@ public class MainMenu : MonoBehaviour
     {
         optionsWindow.SetActive(true);
         controlsWindow.SetActive(true);
+        windowsActive = true; // Establecer el estado de las ventanas como abierto
     }
 
     // Método que cierra las ventanas 
@@ -49,6 +64,7 @@ public class MainMenu : MonoBehaviour
     {
         optionsWindow.SetActive(false);
         controlsWindow.SetActive(false);
+        windowsActive = false; // Establecer el estado de las ventanas como cerrado
     }
 
     // Método que cierra el juego

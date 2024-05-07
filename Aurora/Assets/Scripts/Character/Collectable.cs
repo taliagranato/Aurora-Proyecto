@@ -10,6 +10,7 @@ public class Collectable : MonoBehaviour
     public GameObject[] descriptionTexts; // Array de GameObjects para los textos de descripción
     private int max_collectibles = 8;
     private int lastCollectedIndex = -1; // Índice del último coleccionable obtenido
+    public Pause pauseScript;
 
     private void Awake()
     {
@@ -24,7 +25,18 @@ public class Collectable : MonoBehaviour
         }
         InitializeCollectSprites();
     }
-
+    void Update()
+    {
+        // Verificar si el juego está en pausa
+        if (!pauseScript.isPaused)
+        {
+            // Si el juego no está en pausa, desactivar los textos de descripción
+            foreach (GameObject text in descriptionTexts)
+            {
+                text.SetActive(false);
+            }
+        }
+    }
     void InitializeCollectSprites()
     {
         collectableSprites = new Image[max_collectibles];
@@ -35,6 +47,8 @@ public class Collectable : MonoBehaviour
             collectableSprites[i].gameObject.SetActive(false);
         }
     }
+
+
 
     public void OnCollectibleTriggered(GameObject collectible)
     {

@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1932652120766371378}
   - component: {fileID: 5113937110500028079}
   - component: {fileID: 3525800683714359457}
+  - component: {fileID: 4363853370462786755}
+  - component: {fileID: 2163235099780342090}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -31,10 +33,9 @@ Transform:
   m_LocalPosition: {x: -1072.7769, y: -1138.0366, z: -51.846676}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 722899818841131437}
+  m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8913594222899057820
 BoxCollider:
@@ -124,51 +125,26 @@ MonoBehaviour:
   firing: 0
   playerBool: 0
   initialPos: {x: 0, y: 0, z: 0}
+  score: 0
+  invulnerabilityTime: 1
+  regenerationDelay: 20
+  regenerationRate: 5
   dir: {x: 0, y: 0, z: 0}
   floatSpeed: 10
   chaseRange: 5
   updateDestinationInterval: 4
   player: {fileID: 0}
---- !u!1 &2811868839183817421
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 722899818841131437}
-  - component: {fileID: 5242962172523866103}
-  - component: {fileID: 7998803719359065623}
-  m_Layer: 8
-  m_Name: sprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &722899818841131437
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2811868839183817421}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.167, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.12495}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2572861642245333250}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5242962172523866103
+  enemySprites:
+  - {fileID: 21300000, guid: 64cfc2166cdb83245962369fd2df27ca, type: 3}
+  - {fileID: 21300000, guid: c343833938e91354fb3a2e8032aadc6c, type: 3}
+  - {fileID: 21300000, guid: cb825751dc54761498a4474adc748d19, type: 3}
+--- !u!212 &4363853370462786755
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2811868839183817421}
+  m_GameObject: {fileID: 2114696528467714134}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -203,24 +179,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b3bcb0d4066902c4da17e32a02d84140, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.19, y: 10.8}
+  m_Size: {x: 4.39, y: 7.66}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7998803719359065623
+--- !u!114 &2163235099780342090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2811868839183817421}
+  m_GameObject: {fileID: 2114696528467714134}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 609f237dc2d11404c80dec235338f9f7, type: 3}

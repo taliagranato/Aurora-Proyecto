@@ -7,7 +7,7 @@ using StarterAssets;
 
 public class Player : Character
 {
-    public int score;
+  //  public int score;
     private int bullet_max = 4;
     public int bullet_active;
 
@@ -153,7 +153,7 @@ public class Player : Character
     }
 
     // Método que actualiza visualmente la barra de vida del jugador o enemigo
-    void UpdateBar()
+    public void UpdateBar()
     {
         // Regla de tres
         float lifeImage = (float)hp / hp_max; // imagen completa cuando la vida está al máximo
@@ -169,7 +169,7 @@ public class Player : Character
     }
 
 
-    // Triggers and collisions
+   /* // Triggers and collisions
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Collectable")
@@ -193,7 +193,7 @@ public class Player : Character
             hp -= 5;
             Debug.Log("Hp: " + hp);
         }
-    }
+    }*/
 
     // Corrutinas
     IEnumerator SpecialBulletTimer()
