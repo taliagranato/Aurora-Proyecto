@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class Character : MonoBehaviour
 {
@@ -18,11 +20,10 @@ public class Character : MonoBehaviour
     public float invulnerabilityTime = 1f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Indica si el jugador es invulnerable en el momento
     
-        // Regeneración de la salud
-        public float regenerationDelay = 20f; // Tiempo de espera para iniciar la regeneración
-        public float regenerationRate = 5f; // Cantidad de salud a regenerar por segundo
-        private Coroutine regenerationCoroutine; // Referencia a la corrutina de regeneración
-
+    // Regeneración de la salud
+    public float regenerationDelay = 20f; // Tiempo de espera para iniciar la regeneración
+    public float regenerationRate = 5f; // Cantidad de salud a regenerar por segundo
+    private Coroutine regenerationCoroutine; // Referencia a la corrutina de regeneración
 
 
     protected virtual void Start()
@@ -38,6 +39,8 @@ public class Character : MonoBehaviour
         {
             initialPos.y += playerCollider.bounds.extents.y; // Ajustar según el tamaño del collider
         }
+
+
     }
     
     protected void LateUpdate()
@@ -51,7 +54,7 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void IsDead()
@@ -153,14 +156,14 @@ public class Character : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (playerBool)
-        { 
+        { /*
             if (other.tag == "Collectable")
             {
                 score++;
                 Debug.Log("Score: " + score);
                 Destroy(other.gameObject);
                 Collectable.Instance.OnCollectibleTriggered(other.gameObject);
-            }
+            }*/
             if (other.tag == "Damage")
             {
                 TakeDamage(5); // Aplica daño y activa la invulnerabilidad

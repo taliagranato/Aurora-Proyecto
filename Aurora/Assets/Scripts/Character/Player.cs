@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using StarterAssets;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class Player : Character
 {
@@ -31,13 +33,21 @@ public class Player : Character
     public ThirdPersonController _thirdPersonController; // Referencia al script ThirdPersonController
     public SpriteRenderer _spriteRenderer; // Referencia al componente SpriteRenderer del jugador
 
+    //Post Processing
+    public Volume volume;
+    public ColorAdjustments color_adjustments;
+    public float saturation;
+
 
     private void Awake()
     {
+        saturation = -60.0f;
         hp_max = 100;
         hp = hp_max;
         bullet_active = bullet_max;
         recharging = false;
+        volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
+        volume.profile.TryGet(out color_adjustments);
     }
 
     // Start is called before the first frame update
@@ -54,6 +64,7 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
+        color_adjustments.saturation.value = saturation;
         if (!pauseScript.isPaused)
         { 
             UpdateBar(); // Actualizar barra de vida
@@ -168,32 +179,38 @@ public class Player : Character
         firing = 0;
     }
 
-
-   /* // Triggers and collisions
-    private void OnTriggerEnter(Collider other)
+    public void IncreaseSaturation()
     {
-        if (other.tag == "Collectable")
-        {
-            score++;
-            Debug.Log("Score: " + score);
-            Destroy(other.gameObject);
-            Collectable.Instance.OnCollectibleTriggered(other.gameObject);
-        }
-        if (other.tag == "Damage")
-        {
-            hp -= 5;
-            Debug.Log("Hp: " + hp);
-        }
+        saturation += 10.0f;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Damage")
-        {
-            hp -= 5;
-            Debug.Log("Hp: " + hp);
-        }
-    }*/
+
+     // Triggers and collisions
+     private void OnTriggerEnter(Collider other)
+     {
+         if (other.tag == "Collectable")
+         {
+             IncreaseSaturation();
+             score++;
+             Debug.Log("Score: " + score);
+             Destroy(other.gameObject);
+             Collectable.Instance.OnCollectibleTriggered(other.gameObject);
+         }/*
+         if (other.tag == "Damage")
+         {
+             hp -= 5;
+             Debug.Log("Hp: " + hp);
+         }*/
+     }
+    /*
+     private void OnCollisionEnter(Collision collision)
+     {
+         if (collision.gameObject.tag == "Damage")
+         {
+             hp -= 5;
+             Debug.Log("Hp: " + hp);
+         }
+     }*/
 
     // Corrutinas
     IEnumerator SpecialBulletTimer()
