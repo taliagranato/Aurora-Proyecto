@@ -6,6 +6,7 @@ using UnityEngine;
 using StarterAssets;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using Cinemachine;
 
 public class Player : Character
 {
@@ -22,7 +23,7 @@ public class Player : Character
     public GameObject specialBulletPrefab; // Prefab de la bala especial
     public GameObject fire_point;
     public GameObject Camera;
-    
+
     private bool recharging;
     private bool specialBulletReady = false; // Indica si la bala especial está lista
     public Image specialBulletFill; // Relleno para el sprite de la bala especial
@@ -91,15 +92,17 @@ public class Player : Character
             {
                 // Obtener la dirección del movimiento del ThirdPersonController
                 float moveDirectionX = _thirdPersonController.MoveDirection.x;
-
+                
                 // Escalar el sprite del jugador según la dirección del movimiento
                 if (moveDirectionX > 0) // Movimiento hacia la derecha
                 {
-                    ScalePlayerAndFirePoint(1);
+                    //ScalePlayerAndFirePoint(1);
+                    _spriteRenderer.flipX = false;
                 }
                 else if (moveDirectionX < 0) // Movimiento hacia la izquierda
                 {
-                    ScalePlayerAndFirePoint(moveDirectionX);
+                    // ScalePlayerAndFirePoint(moveDirectionX);
+                    _spriteRenderer.flipX = true;
                 }
             }
         }
