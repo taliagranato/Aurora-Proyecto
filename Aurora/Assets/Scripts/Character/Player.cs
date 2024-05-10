@@ -39,6 +39,9 @@ public class Player : Character
     public ColorAdjustments color_adjustments;
     public float saturation;
 
+    //Sounds
+    public AudioSource shoot_audio;
+
 
     private void Awake()
     {
@@ -177,6 +180,7 @@ public class Player : Character
     // Disparo
     void Fire()
     {
+        shoot_audio.Play();
         Instantiate(bullet, fire_point.transform.position, Camera.transform.rotation);
 
         firing = 0;

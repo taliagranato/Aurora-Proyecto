@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
     public GameObject paint;
 
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +57,7 @@ public class Bullet : MonoBehaviour
             paintSplash.GetComponent<Paint>().SetColor(saved_color);
             
         }
+
         Destroy(this.gameObject);
 
 
