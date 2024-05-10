@@ -11,6 +11,7 @@ TagManager:
   - Damage
   - Bullet
   - Enviroment
+  - End
   layers:
   - Default
   - TransparentFX

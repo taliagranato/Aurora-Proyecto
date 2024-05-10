@@ -7,12 +7,15 @@ using StarterAssets;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using Cinemachine;
+using Unity.VisualScripting;
 
 public class Player : Character
 {
   //  public int score;
     private int bullet_max = 4;
     public int bullet_active;
+    public int collected;
+    public GameObject end_text;
 
     public Image bar; // Rellenador barra de vida
     public Image[] bulletSprites; // Lista de los sprites para las balas
@@ -45,6 +48,7 @@ public class Player : Character
 
     private void Awake()
     {
+        collected = 0;
         saturation = -60.0f;
         hp_max = 100;
         hp = hp_max;
@@ -52,6 +56,7 @@ public class Player : Character
         recharging = false;
         volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
         volume.profile.TryGet(out color_adjustments);
+        end_text.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -186,7 +191,7 @@ public class Player : Character
         firing = 0;
     }
 
-    public void IncreaseSaturation()
+    public void Saturation_Lighting()
     {
         saturation += 10.0f;
     }
@@ -197,18 +202,41 @@ public class Player : Character
      {
          if (other.tag == "Collectable")
          {
-             IncreaseSaturation();
+             collected++;
+            Saturation_Lighting();
              score++;
              Debug.Log("Score: " + score);
              Destroy(other.gameObject);
              Collectable.Instance.OnCollectibleTriggered(other.gameObject);
-         }/*
+         }    
+         
+         /*
          if (other.tag == "Damage")
          {
              hp -= 5;
              Debug.Log("Hp: " + hp);
          }*/
      }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "End" && collected >= 8)
+        {
+            end_text.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                end_text.SetActive(false);
+                Debug.Log("Has Ganado");
+                FadeOut fadeScript = FindObjectOfType<FadeOut>();
+                fadeScript.StartFade("End Screen");
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        end_text.SetActive(false);
+    }
+
     /*
      private void OnCollisionEnter(Collision collision)
      {

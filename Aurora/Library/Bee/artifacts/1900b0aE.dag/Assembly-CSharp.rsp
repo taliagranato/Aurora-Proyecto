@@ -407,6 +407,7 @@
 "Assets/Scripts/Menu/Pause.cs"
 "Assets/Scripts/Platform/Button.cs"
 "Assets/Scripts/Platform/MovingPlatform.cs"
+"Assets/SimpleToon/Scripts/SelfRotation.cs"
 "Assets/StarterAssets/InputSystem/StarterAssetsInputs.cs"
 "Assets/StarterAssets/Mobile/Scripts/CanvasInputs/UICanvasControllerInput.cs"
 "Assets/StarterAssets/Mobile/Scripts/Utilities/MobileDisableAutoSwitchControls.cs"
