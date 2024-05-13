@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class Enemy : Character
 {
@@ -13,11 +14,10 @@ public class Enemy : Character
     private NavMeshAgent agent; // Componente NavMeshAgent para mover al enemigo
     private Pause pauseScript;
     public GameObject player; // Referencia al transform del jugador
+    private GameObject sprite_gameobject;
     private bool isChasing = false; // Indica si el enemigo está persiguiendo al jugador
     private float timeSinceLastUpdate = 0f; // Variable para rastrear el tiempo desde la última actualización
-
-    public List<Sprite> enemySprites; // Lista de sprites disponibles para los enemigos
-
+    public Animator animator;
     public event Action OnDeath;// Declaración del evento OnDeath
 
     protected override void Start()
@@ -27,12 +27,9 @@ public class Enemy : Character
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("sprite");
         // Seleccionar un sprite aleatorio de la lista y asignarlo al SpriteRenderer
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null && enemySprites.Count > 0)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, enemySprites.Count);
-            spriteRenderer.sprite = enemySprites[randomIndex];
-        }
+        sprite_gameobject = this.transform.GetChild(0).gameObject;
+        SpriteRenderer spriteRenderer = this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+        animator.SetBool("Death", false);
 
         InvokeRepeating("UpdateDestination", 0f, updateDestinationInterval); // Actualiza el destino cada cierto intervalo de tiempo
     }
@@ -81,9 +78,10 @@ public class Enemy : Character
     }
     protected override void Death()
     {
+        animator.SetBool("Death", true);
         base.Death(); // Llamar al método Death de la clase base
         OnDeath?.Invoke();
-        Destroy(this.gameObject, 0.1f); // Invoca el evento OnDeath para notificar que el enemigo ha muerto  
+        Destroy(this.gameObject, 1f); // Invoca el evento OnDeath para notificar que el enemigo ha muerto  
     }
 
     // Obtener un punto aleatorio dentro de la NavMesh

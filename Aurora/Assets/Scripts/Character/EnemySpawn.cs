@@ -11,12 +11,12 @@ public class EnemySpawn : MonoBehaviour
         public int maxEnemiesPerSpawnPoint = 3; // Máximo de enemigos activos permitidos por punto de spawn
         public float spawnIntervalMin = 2f; // Intervalo mínimo entre spawns de enemigos
         public float spawnIntervalMax = 5f; // Intervalo máximo entre spawns de enemigos
-
+        
         [HideInInspector]
         public List<GameObject> activeEnemies = new List<GameObject>(); // Lista de enemigos activos en este punto de spawn
     }
 
-    public GameObject enemyPrefab;
+    public List<GameObject> prefabs = new List<GameObject>();
     public List<SpawnPointInfo> spawnPointsInfo; // Información sobre los puntos de spawn para los enemigos
 
     private void Start()
@@ -45,7 +45,9 @@ public class EnemySpawn : MonoBehaviour
         // Verificar si ya se alcanzó el máximo de enemigos por punto de spawn
         if (spawnPointInfo.activeEnemies.Count < spawnPointInfo.maxEnemiesPerSpawnPoint)
         {
-            GameObject newEnemy = Instantiate(enemyPrefab, spawnPointInfo.spawnPoint.position, spawnPointInfo.spawnPoint.rotation);
+            GameObject enemy_type = prefabs[Random.Range(0,3)];
+
+            GameObject newEnemy = Instantiate(enemy_type, spawnPointInfo.spawnPoint.position, spawnPointInfo.spawnPoint.rotation);
             spawnPointInfo.activeEnemies.Add(newEnemy);
 
             // Suscribirnos al evento OnDeath del nuevo enemigo y eliminarlo de la lista de enemigos activos cuando muera

@@ -42,12 +42,17 @@ public class Player : Character
     public ColorAdjustments color_adjustments;
     public float saturation;
 
+    //Animation
+    public Animator player_animator;
+
     //Sounds
     public AudioSource shoot_audio;
+    public AudioSource reload_audio;
 
 
     private void Awake()
     {
+        Cursor.visible = false;
         collected = 0;
         saturation = -60.0f;
         hp_max = 100;
@@ -73,14 +78,16 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
+        player_animator.SetBool("shoot", false);
         color_adjustments.saturation.value = saturation;
         if (!pauseScript.isPaused)
         { 
             UpdateBar(); // Actualizar barra de vida
-            if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0) && !recharging)
+            if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0) && !recharging && !player_animator.GetBool("jump") && player_animator.GetBool("landing"))
             {
                 if (bullet_active > 0)
                 {
+                    player_animator.SetBool("shoot", true);
                     Fire();
                     bullet_active--;
                     UpdateBulletUI();
@@ -194,12 +201,15 @@ public class Player : Character
     public void Saturation_Lighting()
     {
         saturation += 10.0f;
+
+
     }
 
 
      // Triggers and collisions
      private void OnTriggerEnter(Collider other)
      {
+         
          if (other.tag == "Collectable")
          {
              collected++;
@@ -207,15 +217,9 @@ public class Player : Character
              score++;
              Debug.Log("Score: " + score);
              Destroy(other.gameObject);
-             Collectable.Instance.OnCollectibleTriggered(other.gameObject);
+             Collectable.Instance.OnCollectibleTriggered(other.gameObject); 
          }    
          
-         /*
-         if (other.tag == "Damage")
-         {
-             hp -= 5;
-             Debug.Log("Hp: " + hp);
-         }*/
      }
     private void OnTriggerStay(Collider other)
     {
@@ -282,9 +286,15 @@ public class Player : Character
     {
         recharging = true;
         Debug.Log("Recharging...");
-        yield return new WaitForSeconds(2f);
+        for (int i = bullet_active; i < bullet_max; i++)
+        {
+            reload_audio.Play();
+            yield return new WaitForSeconds(0.5f);
+        }
+        //yield return new WaitForSeconds(2f);
         bullet_active = bullet_max;
         UpdateBulletUI(); // Asegurar que los sprites se actualizan después de recargar
         recharging = false;
+        
     }
 }

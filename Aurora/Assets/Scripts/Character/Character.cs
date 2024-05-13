@@ -156,14 +156,15 @@ public class Character : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (playerBool)
-        { /*
+        { 
+            /*
             if (other.tag == "Collectable")
             {
                 score++;
                 Debug.Log("Score: " + score);
                 Destroy(other.gameObject);
                 Collectable.Instance.OnCollectibleTriggered(other.gameObject);
-            }*/
+            } */
             if (other.tag == "Damage")
             {
                 TakeDamage(5); // Aplica daño y activa la invulnerabilidad

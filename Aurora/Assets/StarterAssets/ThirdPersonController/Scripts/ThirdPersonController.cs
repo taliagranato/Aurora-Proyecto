@@ -1,5 +1,5 @@
 ﻿using Cinemachine;
-using Cinemachine.Editor;
+//using Cinemachine.Editor;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
@@ -30,7 +30,9 @@ namespace StarterAssets
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
 
+        public Animator player_animator;
         public AudioClip LandingAudioClip;
+        public AudioClip JumpingAudioClip;
         public AudioClip[] FootstepAudioClips;
         [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
@@ -119,6 +121,7 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
 
+        private bool _hasJumped;
         private bool _hasAnimator;
         private Pause pauseScript;
         public Vector2 MoveDirection { get; private set; } // Variable que almacena la dirección del movimiento
@@ -219,10 +222,8 @@ namespace StarterAssets
         private void GroundedCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                transform.position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
             // update animator if using character
             if (_hasAnimator)
@@ -318,12 +319,24 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
+
+            if(_speed > 0.5f)
+            {
+                player_animator.SetBool("walk", true);
+            }
+            else
+            {
+                player_animator.SetBool("walk", false);
+            }
         }
 
         private void JumpAndGravity()
         {
             if (Grounded)
             {
+                player_animator.SetBool("jump", false);
+                player_animator.SetBool("landing", true);
+
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
@@ -343,8 +356,16 @@ namespace StarterAssets
                 // Jump
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
+                    player_animator.SetBool("landing", false);
+                    player_animator.SetBool("jump", true);
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
+                    if (!_hasJumped)
+                    {
+                        AudioSource.PlayClipAtPoint(JumpingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                        _hasJumped = true;
+                    }
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -363,6 +384,7 @@ namespace StarterAssets
             {
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = JumpTimeout;
+                _hasJumped = false;
 
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
@@ -375,6 +397,7 @@ namespace StarterAssets
                     if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDFreeFall, true);
+                        
                     }
                 }
 
@@ -391,10 +414,11 @@ namespace StarterAssets
                 }
                 else
                 {
+                    player_animator.SetBool("jump", false);
                     _verticalVelocity += Gravity * Time.deltaTime;
                 }
-
                 
+
             }
         }
         // Método para actualizar la dirección del movimiento
@@ -442,6 +466,7 @@ namespace StarterAssets
 
         private void OnLand(AnimationEvent animationEvent)
         {
+            _hasJumped = false;
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);

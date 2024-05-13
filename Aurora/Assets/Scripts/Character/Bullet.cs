@@ -11,6 +11,8 @@ public class Bullet : MonoBehaviour
     public float speed;
     public int damage;
     Enemy enemy_hit;
+    public bool is_special;
+    public float explosion_distance;
 
     public GameObject paint;
 
@@ -44,18 +46,48 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (!is_special)
         {
-            Debug.Log("Enemy hit");
-            enemy_hit = collision.gameObject.GetComponent<Enemy>();
-            enemy_hit.Damage(this.damage);
+            if (collision.gameObject.tag == "Enemy")
+            {
+                Debug.Log("Enemy hit");
+                enemy_hit = collision.gameObject.GetComponent<Enemy>();
+                enemy_hit.Damage(this.damage);
+            }
+            else
+            {
+                GameObject paintSplash = Instantiate(paint, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
+                paintSplash.transform.position += paintSplash.transform.forward / 1000;
+                paintSplash.GetComponent<Paint>().SetColor(saved_color);
+
+            }
         }
         else
         {
-            GameObject paintSplash = Instantiate(paint, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
-            paintSplash.transform.position += paintSplash.transform.forward / 1000;
-            paintSplash.GetComponent<Paint>().SetColor(saved_color);
-            
+            Vector3 impact_point = this.transform.position;
+            Collider[] hits;
+            hits = Physics.OverlapSphere(this.transform.position, explosion_distance);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].transform.tag == "Enemy")
+                {
+                    enemy_hit = hits[i].gameObject.GetComponent<Enemy>();
+                    float distance = Vector3.Distance(impact_point, hits[i].transform.position);
+                    if(distance <= explosion_distance / 3)
+                    {
+                        enemy_hit.Damage(this.damage);
+                    }
+                    else if (distance <= explosion_distance / 2 && distance > explosion_distance / 3)
+                    {
+                        enemy_hit.Damage(this.damage / 2);
+                    }
+                    else if (distance < explosion_distance && distance > explosion_distance / 2)
+                    {
+                        enemy_hit.Damage(this.damage / 4);
+                    }
+                }
+                
+            }
         }
 
         Destroy(this.gameObject);

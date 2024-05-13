@@ -12,6 +12,7 @@ TagManager:
   - Bullet
   - Enviroment
   - End
+  - PostProcess
   layers:
   - Default
   - TransparentFX
