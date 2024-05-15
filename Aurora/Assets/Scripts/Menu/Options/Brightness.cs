@@ -11,7 +11,6 @@ public class Brightness : MonoBehaviour
 {
     public Slider slider;
     public float clippingValue;
-    public Light ligthScene;
     public Volume volume;
     public ColorAdjustments colorAdjustments;
 
@@ -25,8 +24,6 @@ public class Brightness : MonoBehaviour
     void Start()
     {
         slider.value = PlayerPrefs.GetFloat("brightness", clippingValue);
-        ligthScene.intensity = slider.value;
-
     }
 
     public void ChangeValue(float value)
@@ -34,6 +31,5 @@ public class Brightness : MonoBehaviour
         value = clippingValue;
         PlayerPrefs.SetFloat("brightness", clippingValue);
         colorAdjustments.postExposure.value = slider.value;
-        //ligthScene.intensity = slider.value;
     }
 }

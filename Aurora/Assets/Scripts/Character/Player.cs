@@ -11,17 +11,17 @@ using Unity.VisualScripting;
 
 public class Player : Character
 {
-  //  public int score;
     private int bullet_max = 4;
     public int bullet_active;
     public int collected;
     public GameObject end_text;
+    public GameObject interaction_text;
 
+    //UI
     public Image bar; // Rellenador barra de vida
     public Image[] bulletSprites; // Lista de los sprites para las balas
-   
-  private GameObject activeDescriptionText; // Almacena el texto de descripción activo actualmente
     
+    // Bala
     public GameObject bullet;
     public GameObject specialBulletPrefab; // Prefab de la bala especial
     public GameObject fire_point;
@@ -49,6 +49,23 @@ public class Player : Character
     public AudioSource shoot_audio;
     public AudioSource reload_audio;
 
+    // Luces
+    public Light directionalLight;
+    public Color coldColor = new Color(0.5f, 0.7f, 1f);
+    public Color warmColor = new Color(1f, 0.7f, 0.5f);
+    public float lightTransitionDuration = 10f;
+
+    public Vector3 startPosition = new Vector3(1020f, 793f, 368f);
+    public Vector3 finalPosition = new Vector3(1020f, 643f, 767f);
+    public float startRotationX = 70f;
+    public float finalRotationX = 145f;
+    public float startIntensity = 0.8f;
+    public float finalIntensity = 1.1f;
+    Vector3 currentLightPosition;
+    float currentRotationX;
+    float currentIntensity;
+    Color currentColor;
+
 
     private void Awake()
     {
@@ -62,6 +79,11 @@ public class Player : Character
         volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
         volume.profile.TryGet(out color_adjustments);
         end_text.SetActive(false);
+        //Luz
+        currentLightPosition = startPosition;
+        currentRotationX = startRotationX;
+        currentIntensity = startIntensity;
+        currentColor = coldColor;
     }
 
     // Start is called before the first frame update
@@ -82,7 +104,6 @@ public class Player : Character
         color_adjustments.saturation.value = saturation;
         if (!pauseScript.isPaused)
         { 
-            UpdateBar(); // Actualizar barra de vida
             if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0) && !recharging && !player_animator.GetBool("jump") && player_animator.GetBool("landing"))
             {
                 if (bullet_active > 0)
@@ -121,7 +142,8 @@ public class Player : Character
                 }
             }
         }
-        
+        UpdateBar(); // Actualizar barra de vida
+
         this.IsDead();   
 
     }
@@ -183,7 +205,7 @@ public class Player : Character
 
     // Método que actualiza visualmente la barra de vida del jugador o enemigo
     public void UpdateBar()
-    {
+    { 
         // Regla de tres
         float lifeImage = (float)hp / hp_max; // imagen completa cuando la vida está al máximo
         bar.fillAmount = lifeImage;
@@ -198,29 +220,28 @@ public class Player : Character
         firing = 0;
     }
 
-    public void Saturation_Lighting()
+    public void Saturation()
     {
         saturation += 10.0f;
-
-
     }
 
 
     // Triggers and collisions
     protected override void OnTriggerEnter(Collider other)
      {
-        base.OnTriggerEnter(other);
+        /*base.OnTriggerEnter(other);
          if (other.tag == "Collectable")
          {
              collected++;
-            Saturation_Lighting();
+             Saturation();
+             ChangeLightingWithCollectible(collected);
              score++;
              Debug.Log("Score: " + score);
              Destroy(other.gameObject);
              Collectable.Instance.OnCollectibleTriggered(other.gameObject); 
          }    
 
-
+         */
          
      }
     private void OnTriggerStay(Collider other)
@@ -236,22 +257,56 @@ public class Player : Character
                 fadeScript.StartFade("End Screen");
             }
         }
+        if (other.tag == "Collectable")
+        {
+            interaction_text.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                interaction_text.SetActive(false);
+                CollectibleCollected(other);
+            }
+        }
     }
 
+    void CollectibleCollected(Collider other) 
+    {
+       // pauseScript.isPaused = true;
+        Debug.Log("Has Conseguido un coleccionable!");
+        collected++;
+        Saturation();
+        ChangeLightingWithCollectible(collected);
+        score++;
+        Debug.Log("Score: " + score);
+        Destroy(other.gameObject);
+        Collectable.Instance.OnCollectibleTriggered(other.gameObject);
+    }
     private void OnTriggerExit(Collider other)
     {
         end_text.SetActive(false);
+        interaction_text.SetActive(false);
     }
 
-    /*
-     private void OnCollisionEnter(Collision collision)
-     {
-         if (collision.gameObject.tag == "Damage")
-         {
-             hp -= 5;
-             Debug.Log("Hp: " + hp);
-         }
-     }*/
+    public void ChangeLightingWithCollectible(int collected)
+    {
+        currentLightPosition = directionalLight.transform.position;
+        currentRotationX = directionalLight.transform.rotation.eulerAngles.x;
+        currentIntensity = directionalLight.intensity;
+        currentColor = directionalLight.color;
+
+        StartCoroutine(LerpLighting(collected));
+    }
+    IEnumerator LerpLighting(int collected)
+    {
+        float fraction = (float)collected / 8f;
+
+        // Interpolar entre los valores actuales y finales utilizando Lerp
+        directionalLight.transform.position = Vector3.Lerp(currentLightPosition, finalPosition, fraction);
+        directionalLight.transform.rotation = Quaternion.Euler(Mathf.Lerp(currentRotationX, finalRotationX, fraction), directionalLight.transform.rotation.eulerAngles.y, directionalLight.transform.rotation.eulerAngles.z);
+        directionalLight.intensity = Mathf.Lerp(currentIntensity, finalIntensity, fraction);
+        directionalLight.color = Color.Lerp(currentColor, warmColor, fraction);
+
+        yield return null;
+    }
 
     // Corrutinas
     IEnumerator SpecialBulletTimer()

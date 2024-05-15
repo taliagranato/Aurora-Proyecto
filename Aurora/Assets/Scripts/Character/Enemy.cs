@@ -7,25 +7,32 @@ using UnityEngine.Animations;
 
 public class Enemy : Character
 {
-    public Vector3 dir;
-    public float floatSpeed = 1f; // Velocidad de flotación del enemigo
     public float chaseRange = 10f; // Rango de distancia para comenzar a perseguir al jugador
     public float updateDestinationInterval = 3f; // Intervalo para actualizar el destino del enemigo
     private NavMeshAgent agent; // Componente NavMeshAgent para mover al enemigo
     private Pause pauseScript;
     public GameObject player; // Referencia al transform del jugador
     private GameObject sprite_gameobject;
-    private bool isChasing = false; // Indica si el enemigo está persiguiendo al jugador
     private float timeSinceLastUpdate = 0f; // Variable para rastrear el tiempo desde la última actualización
     public Animator animator;
     public event Action OnDeath;// Declaración del evento OnDeath
 
+    // Disparo
+    public GameObject bulletPrefab;
+    public Transform[] firePoints; // Array de puntos de disparo
+    private bool canShoot = true;
+    // Valores para definir un rango de tiempo aleatorio entre disparos
+    public float randomFireRateMax = 1.0f;
+
+
     protected override void Start()
     {
         base.Start();
+        StartCoroutine(ShootRoutine());
         pauseScript = GameObject.FindObjectOfType<Pause>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("sprite");
+     
         // Seleccionar un sprite aleatorio de la lista y asignarlo al SpriteRenderer
         sprite_gameobject = this.transform.GetChild(0).gameObject;
         SpriteRenderer spriteRenderer = this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
@@ -73,8 +80,6 @@ public class Enemy : Character
     {
         Vector3 randomPosition = GetRandomNavMeshPosition();
         agent.SetDestination(randomPosition);
-        //Float();
-
     }
     protected override void Death()
     {
@@ -93,14 +98,39 @@ public class Enemy : Character
         return hit.position;
     }
 
-    // Simular el efecto de flotación
-    /* private void Float()
-     {
-         // Aplica un movimiento sinusoidal en la posición vertical
-         float yOffset = Mathf.Sin(Time.time * floatSpeed) * 0.2f; // La amplitud determina la altura de la flotación
-         transform.position += Vector3.up * yOffset * Time.deltaTime;
-     }*/
 
+    IEnumerator ShootRoutine()
+    {
+        while (true)
+        {
+            // Obtener un tiempo aleatorio entre disparos dentro del rango definido
+            float randomFireRate = UnityEngine.Random.Range(randomFireRateMax, fire_rate);
+            yield return new WaitForSeconds(randomFireRate);
+
+            if (canShoot)
+            {
+                Shoot();
+                canShoot = false;
+                StartCoroutine(ResetShoot());
+            }
+        }
+    }
+    void Shoot()
+    {
+        foreach (Transform firePoint in firePoints)
+        {
+            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        }
+    }
+
+    IEnumerator ResetShoot()
+    {
+        // Esperar hasta que pueda disparar de nuevo según el tiempo aleatorio entre disparos
+        float randomFireRate = UnityEngine.Random.Range(randomFireRateMax, fire_rate);
+        yield return new WaitForSeconds(randomFireRate);
+
+        canShoot = true;
+    }
 
     public void Damage(int damage)
     {
