@@ -206,10 +206,10 @@ public class Player : Character
     }
 
 
-     // Triggers and collisions
-     private void OnTriggerEnter(Collider other)
+    // Triggers and collisions
+    protected override void OnTriggerEnter(Collider other)
      {
-         
+        base.OnTriggerEnter(other);
          if (other.tag == "Collectable")
          {
              collected++;
@@ -219,6 +219,8 @@ public class Player : Character
              Destroy(other.gameObject);
              Collectable.Instance.OnCollectibleTriggered(other.gameObject); 
          }    
+
+
          
      }
     private void OnTriggerStay(Collider other)

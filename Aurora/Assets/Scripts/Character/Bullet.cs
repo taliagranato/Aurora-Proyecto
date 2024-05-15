@@ -64,6 +64,10 @@ public class Bullet : MonoBehaviour
         }
         else
         {
+            GameObject paintSplash = Instantiate(paint, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
+            paintSplash.transform.position += paintSplash.transform.forward / 1000;
+            paintSplash.GetComponent<Paint>().SetColor(saved_color);
+
             Vector3 impact_point = this.transform.position;
             Collider[] hits;
             hits = Physics.OverlapSphere(this.transform.position, explosion_distance);

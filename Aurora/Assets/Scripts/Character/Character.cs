@@ -153,7 +153,7 @@ public class Character : MonoBehaviour
         Debug.Log("Health regeneration completed");
     }
     // Triggers and collisions
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (playerBool)
         { 
