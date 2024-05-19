@@ -19,7 +19,10 @@ public class Character : MonoBehaviour
     public int score;
     public float invulnerabilityTime = 1f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Indica si el jugador es invulnerable en el momento
-    
+                                         //Respawn
+    private Vector3 lastPosition; // Variable para almacenar la última posición del jugador
+    private bool isRespawning = false; // Indicador para evitar respawn múltiple simultáneo
+
     // Regeneración de la salud
     public float regenerationDelay = 20f; // Tiempo de espera para iniciar la regeneración
     public float regenerationRate = 5f; // Cantidad de salud a regenerar por segundo
@@ -99,7 +102,7 @@ public class Character : MonoBehaviour
     {
         if (this.gameObject.CompareTag("Player"))
         { 
-            StartCoroutine(Reaparecer());
+            StartCoroutine(Respawn());
             
         }
         // Activar el evento OnDeath cuando el personaje muere
@@ -107,7 +110,7 @@ public class Character : MonoBehaviour
     }
 
     // Corrutinas
-    IEnumerator Reaparecer()
+    IEnumerator Respawn()
     {
         // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
         yield return new WaitForSeconds(0.1f);
@@ -157,14 +160,11 @@ public class Character : MonoBehaviour
     {
         if (playerBool)
         { 
-            /*
-            if (other.tag == "Collectable")
+            
+            if (other.tag == "Water" && !isRespawning)
             {
-                score++;
-                Debug.Log("Score: " + score);
-                Destroy(other.gameObject);
-                Collectable.Instance.OnCollectibleTriggered(other.gameObject);
-            } */
+                StartCoroutine(RespawnWater() );
+            } 
             if (other.tag == "Damage")
             {
                 TakeDamage(5); // Aplica daño y activa la invulnerabilidad
@@ -177,5 +177,17 @@ public class Character : MonoBehaviour
             }
         }
         
-    } 
+    }
+    IEnumerator RespawnWater()
+    {
+        isRespawning = true; // Marcar que se está haciendo respawn para evitar que se active múltiples veces simultáneamente
+        Debug.Log("Se ha tocado el agua");
+        // Esperar unos segundos antes de hacer respawn
+        yield return new WaitForSeconds(1f);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        // Hacer respawn del jugador en la última posición almacenada
+        player.transform.position = initialPos;
+
+        isRespawning = false; // Restablecer la bandera de respawn para permitir respawn nuevamente
+    }
 }

@@ -49,6 +49,8 @@ public class Player : Character
     public AudioSource shoot_audio;
     public AudioSource reload_audio;
 
+
+
     // Luces
     public Light directionalLight;
     public Color coldColor = new Color(0.5f, 0.7f, 1f);
@@ -94,7 +96,7 @@ public class Player : Character
         InitializeBulletSprites();
         StartCoroutine(SpecialBulletTimer());
         pauseScript = GameObject.FindObjectOfType<Pause>();
-
+       
     }
 
     // Update is called once per frame
@@ -141,9 +143,9 @@ public class Player : Character
                     _spriteRenderer.flipX = true;
                 }
             }
+            UpdateBar(); // Actualizar barra de vida
         }
-        UpdateBar(); // Actualizar barra de vida
-
+        
         this.IsDead();   
 
     }
@@ -227,23 +229,6 @@ public class Player : Character
 
 
     // Triggers and collisions
-    protected override void OnTriggerEnter(Collider other)
-     {
-        /*base.OnTriggerEnter(other);
-         if (other.tag == "Collectable")
-         {
-             collected++;
-             Saturation();
-             ChangeLightingWithCollectible(collected);
-             score++;
-             Debug.Log("Score: " + score);
-             Destroy(other.gameObject);
-             Collectable.Instance.OnCollectibleTriggered(other.gameObject); 
-         }    
-
-         */
-         
-     }
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "End" && collected >= 8)
@@ -326,6 +311,10 @@ public class Player : Character
 
         specialBulletReady = true; // Activar la bala especial
     }
+
+
+    
+
     void FireSpecialBullet()
     {
         Instantiate(specialBulletPrefab, fire_point.transform.position, Camera.transform.rotation);
