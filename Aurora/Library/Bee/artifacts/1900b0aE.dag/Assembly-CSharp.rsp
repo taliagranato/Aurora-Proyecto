@@ -399,6 +399,8 @@
 "Assets/Scripts/Game/MovingPlatform.cs"
 "Assets/Scripts/Game/Paint.cs"
 "Assets/Scripts/Game/Player.cs"
+"Assets/Scripts/Game/PredictTrajectory.cs"
+"Assets/Scripts/Game/ProjectileProperties.cs"
 "Assets/Scripts/Game/Score.cs"
 "Assets/Scripts/Game/SpriteRotation.cs"
 "Assets/Scripts/Game/Weapon.cs"

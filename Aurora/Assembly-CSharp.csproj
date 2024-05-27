@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Game\Bullet.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\Asset Store\Bitgem\StylisedWater\URP\Scripts\Bitgem\Core\FlagEnumAttribute.cs" />
+    <Compile Include="Assets\Scripts\Game\ProjectileProperties.cs" />
     <Compile Include="Assets\Scripts\Game\Weapon.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\Asset Store\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WateverVolumeFloater.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Assets\Scripts\Game\Button.cs" />
     <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scripts\Game\Player.cs" />
+    <Compile Include="Assets\Scripts\Game\PredictTrajectory.cs" />
     <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\ThirdPersonController.cs" />
   </ItemGroup>
   <ItemGroup>

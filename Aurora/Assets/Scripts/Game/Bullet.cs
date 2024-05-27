@@ -17,7 +17,6 @@ public class Bullet : MonoBehaviour
     public GameObject paint;
 
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +36,7 @@ public class Bullet : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, rot);
         }
     }
+
 
     private void AssignColor()
     {
