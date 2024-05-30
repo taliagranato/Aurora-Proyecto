@@ -89,7 +89,10 @@ public class Character : MonoBehaviour
         if (!isInvulnerable) // Solo aplica daño si el jugador no es invulnerable
         {
             hp -= damage;
+
             StartCoroutine(InvulnerabilityRoutine());
+            
+
             if (regenerationCoroutine != null) // Detener la regeneración si se recibe daño
             {
                 StopCoroutine(regenerationCoroutine);
@@ -97,6 +100,8 @@ public class Character : MonoBehaviour
             }
         }
     }
+
+
 
     protected virtual void Death()
     {
@@ -126,8 +131,13 @@ public class Character : MonoBehaviour
     IEnumerator InvulnerabilityRoutine()
     {
         isInvulnerable = true;
+        Player _player = GetComponentInChildren<Player>();
+        _player.EffectCorroutine();
         yield return new WaitForSeconds(invulnerabilityTime);
         isInvulnerable = false;
+
+        
+        
 
         // Iniciar regeneración si no está ya activa
         if (regenerationCoroutine == null)

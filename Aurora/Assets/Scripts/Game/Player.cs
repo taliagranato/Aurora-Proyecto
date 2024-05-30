@@ -78,8 +78,12 @@ public class Player : Character
         hp = hp_max;
         bullet_active = bullet_max;
         recharging = false;
-        volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
-        volume.profile.TryGet(out color_adjustments);
+
+
+        //volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
+        //volume.profile.TryGet(out color_adjustments);
+        
+        
         end_text.SetActive(false);
         //Luz
         currentLightPosition = startPosition;
@@ -102,10 +106,10 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        player_animator.SetBool("shoot", false);
-        color_adjustments.saturation.value = saturation;
+        //color_adjustments.saturation.value = saturation;
         if (!pauseScript.isPaused)
-        { 
+        {
+            player_animator.SetBool("shoot", false);
             if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0) && !recharging && !player_animator.GetBool("jump") && player_animator.GetBool("landing"))
             {
                 if (bullet_active > 0)
@@ -135,12 +139,12 @@ public class Player : Character
                 if (moveDirectionX > 0) // Movimiento hacia la derecha
                 {
                     //ScalePlayerAndFirePoint(1);
-                    _spriteRenderer.flipX = false;
+                    _spriteRenderer.flipX = true;
                 }
                 else if (moveDirectionX < 0) // Movimiento hacia la izquierda
                 {
                     // ScalePlayerAndFirePoint(moveDirectionX);
-                    _spriteRenderer.flipX = true;
+                    _spriteRenderer.flipX = false;
                 }
             }
             UpdateBar(); // Actualizar barra de vida
@@ -149,6 +153,7 @@ public class Player : Character
         this.IsDead();   
 
     }
+
     // Método para ajustar la escala del jugador y del punto de disparo
     void ScalePlayerAndFirePoint(float direction)
     {
@@ -312,8 +317,22 @@ public class Player : Character
         specialBulletReady = true; // Activar la bala especial
     }
 
+    public void EffectCorroutine()
+    {
+        StartCoroutine(DamageEffect());
+    }
 
-    
+    public IEnumerator DamageEffect()
+    {
+        _spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(0.2f);
+        _spriteRenderer.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(0.2f);
+        _spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(0.2f);
+        _spriteRenderer.color = new Color(1, 1, 1, 1);
+    }
+
 
     void FireSpecialBullet()
     {
@@ -335,7 +354,7 @@ public class Player : Character
         for (int i = bullet_active; i < bullet_max; i++)
         {
             reload_audio.Play();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
         //yield return new WaitForSeconds(2f);
         bullet_active = bullet_max;

@@ -37,7 +37,6 @@ public class Bullet : MonoBehaviour
         }
     }
 
-
     private void AssignColor()
     {
         random_color = new Color(Random.Range(0.0f,1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f),1.0f);
