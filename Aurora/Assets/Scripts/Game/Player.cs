@@ -20,13 +20,13 @@ public class Player : Character
     //UI
     public Image bar; // Rellenador barra de vida
     public Image[] bulletSprites; // Lista de los sprites para las balas
-    
+    public GameObject Camera;
+
     // Bala
     public GameObject bullet;
     public GameObject specialBulletPrefab; // Prefab de la bala especial
     public GameObject fire_point;
-    public GameObject Camera;
-
+    
     private bool recharging;
     private bool specialBulletReady = false; // Indica si la bala especial está lista
     public Image specialBulletFill; // Relleno para el sprite de la bala especial
@@ -48,7 +48,6 @@ public class Player : Character
     //Sounds
     public AudioSource shoot_audio;
     public AudioSource reload_audio;
-
 
 
     // Luces
@@ -78,11 +77,6 @@ public class Player : Character
         hp = hp_max;
         bullet_active = bullet_max;
         recharging = false;
-
-
-        //volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
-        //volume.profile.TryGet(out color_adjustments);
-        
         
         end_text.SetActive(false);
         //Luz
@@ -99,8 +93,7 @@ public class Player : Character
         score = 0;
         InitializeBulletSprites();
         StartCoroutine(SpecialBulletTimer());
-        pauseScript = GameObject.FindObjectOfType<Pause>();
-       
+        pauseScript = GameObject.FindObjectOfType<Pause>();  
     }
 
     // Update is called once per frame
@@ -147,9 +140,10 @@ public class Player : Character
                     _spriteRenderer.flipX = false;
                 }
             }
+
             UpdateBar(); // Actualizar barra de vida
         }
-        
+
         this.IsDead();   
 
     }
@@ -362,4 +356,5 @@ public class Player : Character
         recharging = false;
         
     }
+
 }

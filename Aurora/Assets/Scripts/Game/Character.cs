@@ -11,23 +11,19 @@ public class Character : MonoBehaviour
     public int hp;
     public int hp_max;
     public float fire_rate;
-    public float firing;
+    protected float firing;
 
     // Player
     public bool playerBool;
-    public Vector3 initialPos;// variable que guarda la posición inicial del jugador
+    protected Vector3 initialPos;// variable que guarda la posición inicial del jugador
     public int score;
     public float invulnerabilityTime = 1f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Indica si el jugador es invulnerable en el momento
-                                         //Respawn
-    private Vector3 lastPosition; // Variable para almacenar la última posición del jugador
-    private bool isRespawning = false; // Indicador para evitar respawn múltiple simultáneo
 
     // Regeneración de la salud
     public float regenerationDelay = 20f; // Tiempo de espera para iniciar la regeneración
     public float regenerationRate = 5f; // Cantidad de salud a regenerar por segundo
     private Coroutine regenerationCoroutine; // Referencia a la corrutina de regeneración
-
 
     protected virtual void Start()
     {
@@ -38,12 +34,6 @@ public class Character : MonoBehaviour
         Collider playerCollider = player.GetComponent<Collider>();
         hp = hp_max;
         score = 0;
-        if (playerCollider != null)
-        {
-            initialPos.y += playerCollider.bounds.extents.y; // Ajustar según el tamaño del collider
-        }
-
-
     }
     
     protected void LateUpdate()
@@ -101,8 +91,6 @@ public class Character : MonoBehaviour
         }
     }
 
-
-
     protected virtual void Death()
     {
         if (this.gameObject.CompareTag("Player"))
@@ -111,12 +99,51 @@ public class Character : MonoBehaviour
             
         }
         // Activar el evento OnDeath cuando el personaje muere
-        Debug.Log(this.name + " dies");
+        //Debug.Log(this.name + " dies");
+    }
+
+    // Triggers and collisions
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (playerBool)
+        {
+
+            if (other.tag == "Water")
+            {
+                StartCoroutine(RespawnWater());
+            }
+            if (other.tag == "Damage")
+            {
+                TakeDamage(5); // Aplica daño y activa la invulnerabilidad
+                Debug.Log("Hp: " + hp);
+            }
+            if (other.tag == "Enemy")
+            {
+                TakeDamage(10); // Aplica daño y activa la invulnerabilidad
+                Debug.Log("Hp: " + hp);
+            }
+        }
+
     }
 
     // Corrutinas
     IEnumerator Respawn()
     {
+        // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
+        yield return new WaitForSeconds(1.0f);
+
+        // Mover al jugador de vuelta a la posición inicial
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            Debug.Log("Respawning player at initial position: " + initialPos);
+            hp = hp_max;
+            player.transform.position = initialPos;
+        }
+    }
+    IEnumerator RespawnWater()
+    {
+        Debug.Log("Se ha tocado el agua");
         // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
         yield return new WaitForSeconds(0.1f);
 
@@ -124,7 +151,7 @@ public class Character : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
-            hp = hp_max;
+            Debug.Log("Respawning player at initial position (water): " + initialPos);
             player.transform.position = initialPos;
         }
     }
@@ -135,9 +162,6 @@ public class Character : MonoBehaviour
         _player.EffectCorroutine();
         yield return new WaitForSeconds(invulnerabilityTime);
         isInvulnerable = false;
-
-        
-        
 
         // Iniciar regeneración si no está ya activa
         if (regenerationCoroutine == null)
@@ -164,40 +188,5 @@ public class Character : MonoBehaviour
        // Asegurar que la vida alcanza el máximo al final de la regeneración
         hp = hp_max;
         Debug.Log("Health regeneration completed");
-    }
-    // Triggers and collisions
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        if (playerBool)
-        { 
-            
-            if (other.tag == "Water" && !isRespawning)
-            {
-                StartCoroutine(RespawnWater() );
-            } 
-            if (other.tag == "Damage")
-            {
-                TakeDamage(5); // Aplica daño y activa la invulnerabilidad
-                Debug.Log("Hp: " + hp);
-            }
-            if (other.tag == "Enemy")
-            {
-                TakeDamage(10); // Aplica daño y activa la invulnerabilidad
-                Debug.Log("Hp: " + hp);
-            }
-        }
-        
-    }
-    IEnumerator RespawnWater()
-    {
-        isRespawning = true; // Marcar que se está haciendo respawn para evitar que se active múltiples veces simultáneamente
-        Debug.Log("Se ha tocado el agua");
-        // Esperar unos segundos antes de hacer respawn
-        yield return new WaitForSeconds(1f);
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        // Hacer respawn del jugador en la última posición almacenada
-        player.transform.position = initialPos;
-
-        isRespawning = false; // Restablecer la bandera de respawn para permitir respawn nuevamente
     }
 }
