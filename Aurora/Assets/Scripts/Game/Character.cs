@@ -110,7 +110,7 @@ public class Character : MonoBehaviour
 
             if (other.tag == "Water")
             {
-                StartCoroutine(RespawnWater());
+                //StartCoroutine(RespawnWater());
             }
             if (other.tag == "Damage")
             {
@@ -138,20 +138,6 @@ public class Character : MonoBehaviour
         {
             Debug.Log("Respawning player at initial position: " + initialPos);
             hp = hp_max;
-            player.transform.position = initialPos;
-        }
-    }
-    IEnumerator RespawnWater()
-    {
-        Debug.Log("Se ha tocado el agua");
-        // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
-        yield return new WaitForSeconds(0.1f);
-
-        // Mover al jugador de vuelta a la posición inicial
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            Debug.Log("Respawning player at initial position (water): " + initialPos);
             player.transform.position = initialPos;
         }
     }

@@ -230,6 +230,12 @@ public class Player : Character
     // Triggers and collisions
     private void OnTriggerStay(Collider other)
     {
+        if (other.tag == "Water")
+        {
+            StartCoroutine(RespawnWater());
+        }
+
+
         if (other.tag == "End" && collected >= 8)
         {
             end_text.SetActive(true);
@@ -279,6 +285,18 @@ public class Player : Character
 
         StartCoroutine(LerpLighting(collected));
     }
+    IEnumerator RespawnWater()
+    {
+        Debug.Log("Se ha tocado el agua");
+        FadeOut fadeScript = FindObjectOfType<FadeOut>();
+        fadeScript.StartFade();
+        // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
+        yield return new WaitForSeconds(1);
+
+        // Mover al jugador de vuelta a la posición inicial
+        this.transform.position = initialPos;
+    }
+
     IEnumerator LerpLighting(int collected)
     {
         float fraction = (float)collected / 8f;

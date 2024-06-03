@@ -17,13 +17,50 @@ public class FadeOut : MonoBehaviour
             imageFade.color = new Color(imageFade.color.r, imageFade.color.g, imageFade.color.b, 0f);
     }
 
+    public void StartFade()
+    {
+        StartCoroutine(FadeEffect());
+    }
+
     public void StartFade(string scene)
     {
         StartCoroutine(FadeEffect(scene));
     }
 
+    protected IEnumerator FadeEffect()
+    {
+        Debug.Log("Fade");
+        float initialTime = Time.time;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < durationFade/2)
+        {
+            timeElapsed = Time.time - initialTime;
+            float porcentajeCompletado = timeElapsed / durationFade*2;
+
+            // Lerp para suavizar el cambio de opacidad
+            float alphaActual = Mathf.Lerp(0f, 1f, porcentajeCompletado);
+            imageFade.color = new Color(imageFade.color.r, imageFade.color.g, imageFade.color.b, alphaActual);
+
+            yield return null;
+        }
+        while (timeElapsed < durationFade)
+        {
+            timeElapsed = Time.time - initialTime;
+            float porcentajeCompletado = timeElapsed / durationFade;
+
+            // Lerp para suavizar el cambio de opacidad
+            float alphaActual = Mathf.Lerp(0f, 1f, 1/porcentajeCompletado);
+            imageFade.color = new Color(imageFade.color.r, imageFade.color.g, imageFade.color.b, alphaActual);
+
+            yield return null;
+        }
+
+    }
+
     protected IEnumerator FadeEffect(string scene)
     {
+        Debug.Log("Fade");
         float initialTime = Time.time;
         float timeElapsed = 0f;
 
