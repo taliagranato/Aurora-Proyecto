@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject optionsWindow;
     public GameObject controlsWindow;
+//public GameObject creditsWindow;
     private bool windowsActive = false; // Variable para controlar el estado de las ventanas
 
 
@@ -17,6 +18,7 @@ public class MainMenu : MonoBehaviour
     {
         optionsWindow.SetActive(false);
         controlsWindow.SetActive(false);
+      //  creditsWindow.SetActive(false);
     }
 
     private void Update()
@@ -56,14 +58,25 @@ public class MainMenu : MonoBehaviour
     {
         optionsWindow.SetActive(true);
         controlsWindow.SetActive(true);
+      //  creditsWindow.SetActive(false);
         windowsActive = true; // Establecer el estado de las ventanas como abierto
     }
+
+  /*  public void CreditsOn()
+    {
+        creditsWindow.SetActive(true);
+    }
+    public void CreditsOff()
+    {
+        creditsWindow.SetActive(false);
+    }*/
 
     // Método que cierra las ventanas 
     public void WindowsOff()
     {
         optionsWindow.SetActive(false);
         controlsWindow.SetActive(false);
+       // creditsWindow.SetActive(false);
         windowsActive = false; // Establecer el estado de las ventanas como cerrado
     }
 
