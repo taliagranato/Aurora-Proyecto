@@ -298,10 +298,9 @@ MonoBehaviour:
   hp: 100
   hp_max: 10
   fire_rate: 1
-  firing: 0
+  score: {fileID: 0}
   playerBool: 0
-  initialPos: {x: 0, y: 0, z: 0}
-  score: 0
+  scoreAmmount: 10
   invulnerabilityTime: 1
   regenerationDelay: 20
   regenerationRate: 5

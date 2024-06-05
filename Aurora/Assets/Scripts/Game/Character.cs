@@ -12,11 +12,13 @@ public class Character : MonoBehaviour
     public int hp_max;
     public float fire_rate;
     protected float firing;
+    public GameObject controller;
+    public Score score;
 
     // Player
     public bool playerBool;
     protected Vector3 initialPos;// variable que guarda la posición inicial del jugador
-    public int score;
+    public int scoreAmmount;
     public float invulnerabilityTime = 1f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Indica si el jugador es invulnerable en el momento
 
@@ -27,13 +29,14 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
+        controller = GameObject.Find("Controller");
+        score = controller.GetComponent<Score>();
         // Guardar la posición inicial del jugador al inicio del juego
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         initialPos = player.transform.position;
         // Ajustar la posición inicial según el tamaño del collider del jugador
         Collider playerCollider = player.GetComponent<Collider>();
         hp = hp_max;
-        score = 0;
     }
     
     protected void LateUpdate()
@@ -57,10 +60,13 @@ public class Character : MonoBehaviour
             if (this.playerBool)
             {
                 Death();
+                Player _player = GetComponentInChildren<Player>();
+                
+                StartCoroutine(_player.Respawn(50));
+                _player.hp = hp_max/2;
             }
             else
             {
-                Debug.Log("Enemy dies");
                 Death();
             }
 
@@ -79,7 +85,7 @@ public class Character : MonoBehaviour
         if (!isInvulnerable) // Solo aplica daño si el jugador no es invulnerable
         {
             hp -= damage;
-
+            IsDead();
             StartCoroutine(InvulnerabilityRoutine());
             
 
@@ -95,9 +101,15 @@ public class Character : MonoBehaviour
     {
         if (this.gameObject.CompareTag("Player"))
         { 
-            StartCoroutine(Respawn());
             
         }
+        else
+        {
+            score.AddScore(scoreAmmount);
+            Debug.Log("Enemy dies. Score: " + scoreAmmount + ". Total Score: " + score.GetScore());
+            
+        }
+
         // Activar el evento OnDeath cuando el personaje muere
         //Debug.Log(this.name + " dies");
     }
@@ -127,6 +139,7 @@ public class Character : MonoBehaviour
     }
 
     // Corrutinas
+    /*
     IEnumerator Respawn()
     {
         // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
@@ -140,7 +153,8 @@ public class Character : MonoBehaviour
             hp = hp_max;
             player.transform.position = initialPos;
         }
-    }
+    }*/
+
     IEnumerator InvulnerabilityRoutine()
     {
         isInvulnerable = true;

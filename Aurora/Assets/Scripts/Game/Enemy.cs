@@ -72,7 +72,7 @@ public class Enemy : Character
                 timeSinceLastUpdate = Time.time; // Actualizar el tiempo de la última actualización
             }
         }
-        this.IsDead();
+        
     }
 
     // Actualiza el destino del enemigo
@@ -86,6 +86,7 @@ public class Enemy : Character
         animator.SetBool("Death", true);
         base.Death(); // Llamar al método Death de la clase base
         OnDeath?.Invoke();
+
         Destroy(this.gameObject, 1f); // Invoca el evento OnDeath para notificar que el enemigo ha muerto  
     }
 
@@ -135,6 +136,7 @@ public class Enemy : Character
     public void Damage(int damage)
     {
         hp -= damage;
+        this.IsDead();
     }
 }
 

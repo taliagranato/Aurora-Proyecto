@@ -36,7 +36,7 @@ public class FadeOut : MonoBehaviour
         while (timeElapsed < durationFade/2)
         {
             timeElapsed = Time.time - initialTime;
-            float porcentajeCompletado = timeElapsed / durationFade*2;
+            float porcentajeCompletado = timeElapsed / (durationFade/2);
 
             // Lerp para suavizar el cambio de opacidad
             float alphaActual = Mathf.Lerp(0f, 1f, porcentajeCompletado);
@@ -44,13 +44,17 @@ public class FadeOut : MonoBehaviour
 
             yield return null;
         }
+
+        yield return new WaitForSeconds(0.5f);
+        initialTime = Time.time;
+
         while (timeElapsed < durationFade)
         {
             timeElapsed = Time.time - initialTime;
-            float porcentajeCompletado = timeElapsed / durationFade;
+            float porcentajeCompletado = timeElapsed / (durationFade/2);
 
             // Lerp para suavizar el cambio de opacidad
-            float alphaActual = Mathf.Lerp(0f, 1f, 1/porcentajeCompletado);
+            float alphaActual = Mathf.Lerp(1f, 0f, porcentajeCompletado);
             imageFade.color = new Color(imageFade.color.r, imageFade.color.g, imageFade.color.b, alphaActual);
 
             yield return null;

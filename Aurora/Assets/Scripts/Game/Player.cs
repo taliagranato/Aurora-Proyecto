@@ -90,7 +90,6 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
-        score = 0;
         InitializeBulletSprites();
         StartCoroutine(SpecialBulletTimer());
         pauseScript = GameObject.FindObjectOfType<Pause>();  
@@ -144,7 +143,7 @@ public class Player : Character
             UpdateBar(); // Actualizar barra de vida
         }
 
-        this.IsDead();   
+        //this.IsDead();   
 
     }
 
@@ -232,7 +231,7 @@ public class Player : Character
     {
         if (other.tag == "Water")
         {
-            StartCoroutine(RespawnWater());
+            StartCoroutine(Respawn(10));
         }
 
 
@@ -265,7 +264,6 @@ public class Player : Character
         collected++;
         Saturation();
         ChangeLightingWithCollectible(collected);
-        score++;
         Debug.Log("Score: " + score);
         Destroy(other.gameObject);
         Collectable.Instance.OnCollectibleTriggered(other.gameObject);
@@ -285,15 +283,18 @@ public class Player : Character
 
         StartCoroutine(LerpLighting(collected));
     }
-    IEnumerator RespawnWater()
+
+    public IEnumerator Respawn(int scoreRemoved)
     {
-        Debug.Log("Se ha tocado el agua");
+        Debug.Log("Respawning");
         FadeOut fadeScript = FindObjectOfType<FadeOut>();
         fadeScript.StartFade();
         // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
         yield return new WaitForSeconds(1);
 
         // Mover al jugador de vuelta a la posición inicial
+        score.RemoveScore(scoreRemoved);
+        Debug.Log("Score: " + score.GetScore());
         this.transform.position = initialPos;
     }
 
