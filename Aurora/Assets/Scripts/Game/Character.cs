@@ -47,11 +47,6 @@ public class Character : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void IsDead()
     {
@@ -61,15 +56,14 @@ public class Character : MonoBehaviour
             {
                 Death();
                 Player _player = GetComponentInChildren<Player>();
-                
+
                 StartCoroutine(_player.Respawn(50));
-                _player.hp = hp_max/2;
+                _player.hp = hp_max / 2;
             }
             else
             {
                 Death();
             }
-
         }
     }
 
@@ -107,13 +101,10 @@ public class Character : MonoBehaviour
         {
             score.AddScore(scoreAmmount);
             Debug.Log("Enemy dies. Score: " + scoreAmmount + ". Total Score: " + score.GetScore());
-            
+            score.AddEnemyCount();
         }
-
-        // Activar el evento OnDeath cuando el personaje muere
-        //Debug.Log(this.name + " dies");
     }
-
+    
     // Triggers and collisions
     protected virtual void OnTriggerEnter(Collider other)
     {

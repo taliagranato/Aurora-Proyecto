@@ -5,11 +5,13 @@ using UnityEngine;
 public class Score : MonoBehaviour
 {
     public int score;
+    public int enemysDead;
 
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
+        enemysDead = 0;
         UpdateScore();
     }
 
@@ -28,6 +30,16 @@ public class Score : MonoBehaviour
     private void UpdateScore()
     {
         PlayerPrefs.SetInt("score", score);
+    }
+    public void AddEnemyCount()
+    {
+        enemysDead ++;
+        Debug.Log(" Enemigos eliminados: " + enemysDead);
+        PlayerPrefs.SetInt("enemys", enemysDead);
+    }
+    public int GetEnemys()
+    { 
+        return PlayerPrefs.GetInt("enemys");
     }
 
     public int GetScore()

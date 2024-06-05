@@ -49,7 +49,6 @@ public class Player : Character
     public AudioSource shoot_audio;
     public AudioSource reload_audio;
 
-
     // Luces
     public Light directionalLight;
     public Color coldColor = new Color(0.5f, 0.7f, 1f);
@@ -66,7 +65,6 @@ public class Player : Character
     float currentRotationX;
     float currentIntensity;
     Color currentColor;
-
 
     private void Awake()
     {
@@ -142,9 +140,6 @@ public class Player : Character
 
             UpdateBar(); // Actualizar barra de vida
         }
-
-        //this.IsDead();   
-
     }
 
     // Método para ajustar la escala del jugador y del punto de disparo
@@ -165,7 +160,8 @@ public class Player : Character
         transform.localScale = playerScale;
         fire_point.transform.localScale = firePointScale;
     }
-    // Iniciacion Sprites
+    
+    // Iniciacion Sprite
     void InitializeBulletSprites()
     {
         bulletSprites = new Image[bullet_max];
@@ -220,12 +216,6 @@ public class Player : Character
         firing = 0;
     }
 
-    public void Saturation()
-    {
-        saturation += 10.0f;
-    }
-
-
     // Triggers and collisions
     private void OnTriggerStay(Collider other)
     {
@@ -256,7 +246,13 @@ public class Player : Character
             }
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        end_text.SetActive(false);
+        interaction_text.SetActive(false);
+    }
 
+    // Cuando se colecciona un collectible:
     void CollectibleCollected(Collider other) 
     {
        // pauseScript.isPaused = true;
@@ -268,10 +264,10 @@ public class Player : Character
         Destroy(other.gameObject);
         Collectable.Instance.OnCollectibleTriggered(other.gameObject);
     }
-    private void OnTriggerExit(Collider other)
+   
+    public void Saturation()
     {
-        end_text.SetActive(false);
-        interaction_text.SetActive(false);
+        saturation += 10.0f;
     }
 
     public void ChangeLightingWithCollectible(int collected)
@@ -284,6 +280,7 @@ public class Player : Character
         StartCoroutine(LerpLighting(collected));
     }
 
+// Corrutinas
     public IEnumerator Respawn(int scoreRemoved)
     {
         Debug.Log("Respawning");
@@ -311,7 +308,7 @@ public class Player : Character
         yield return null;
     }
 
-    // Corrutinas
+    
     IEnumerator SpecialBulletTimer()
     {
         float timer = specialBulletFillDuration;
@@ -346,7 +343,7 @@ public class Player : Character
         _spriteRenderer.color = new Color(1, 1, 1, 1);
     }
 
-
+    // Bala especial
     void FireSpecialBullet()
     {
         Instantiate(specialBulletPrefab, fire_point.transform.position, Camera.transform.rotation);
@@ -375,5 +372,4 @@ public class Player : Character
         recharging = false;
         
     }
-
 }
