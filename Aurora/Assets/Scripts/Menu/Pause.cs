@@ -8,7 +8,7 @@ public class Pause : MonoBehaviour
     public bool isPaused = false;
     public Options optionsPanel;
 
-    private void Start()
+    private void Awake()
     {
         isPaused = false;
         pauseMenuUI.SetActive(false);

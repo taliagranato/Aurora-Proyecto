@@ -7,7 +7,7 @@ public class LogicOptions : MonoBehaviour
     public Options optionsPanel;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         optionsPanel = GameObject.FindGameObjectWithTag("Options").GetComponent<Options>();
 

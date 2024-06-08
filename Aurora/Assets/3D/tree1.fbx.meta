@@ -3,7 +3,17 @@ guid: 07c85e0f08c63d742882a8610e810514
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: lovepik-green-cartoon-twig-leaves-png-image_401456079_wh1200-removebg-preview
+    second: {fileID: 2800000, guid: 07a835d75a5870648a835128d6bc8add, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: whatsapp image 2024-06-06 at 12.01.37_02bf9ba1
+    second: {fileID: 2800000, guid: a630318e5a52c4b4ca896c69b4c71a08, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
