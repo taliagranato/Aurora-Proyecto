@@ -25,7 +25,7 @@ public class Player : Character
     // Bala
     public GameObject bullet;
     public GameObject specialBulletPrefab; // Prefab de la bala especial
-    public GameObject fire_point;
+    public Transform fire_point;
     
     private bool recharging;
     private bool specialBulletReady = false; // Indica si la bala especial está lista
