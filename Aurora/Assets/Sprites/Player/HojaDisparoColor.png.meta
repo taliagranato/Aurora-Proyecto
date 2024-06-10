@@ -113,12 +113,12 @@ TextureImporter:
       name: HojaDisparoColor_0
       rect:
         serializedVersion: 2
-        x: 936
-        y: 1609
-        width: 459
-        height: 822
+        x: 0
+        y: 877
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -134,12 +134,12 @@ TextureImporter:
       name: HojaDisparoColor_1
       rect:
         serializedVersion: 2
-        x: 1546
-        y: 1609
-        width: 348
-        height: 822
+        x: 584
+        y: 877
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: HojaDisparoColor_2
       rect:
         serializedVersion: 2
-        x: 1978
-        y: 1609
-        width: 447
-        height: 822
+        x: 1168
+        y: 877
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,12 +176,12 @@ TextureImporter:
       name: HojaDisparoColor_3
       rect:
         serializedVersion: 2
-        x: 2543
-        y: 1608
-        width: 428
-        height: 823
+        x: 1752
+        y: 877
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -197,12 +197,12 @@ TextureImporter:
       name: HojaDisparoColor_4
       rect:
         serializedVersion: 2
-        x: 3024
-        y: 1609
-        width: 459
-        height: 822
+        x: 2336
+        y: 877
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -218,12 +218,12 @@ TextureImporter:
       name: HojaDisparoColor_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 664
-        width: 518
-        height: 820
+        x: 2920
+        y: 877
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -239,12 +239,12 @@ TextureImporter:
       name: HojaDisparoColor_6
       rect:
         serializedVersion: 2
-        x: 556
-        y: 662
-        width: 467
-        height: 822
+        x: 0
+        y: 0
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -260,12 +260,12 @@ TextureImporter:
       name: HojaDisparoColor_7
       rect:
         serializedVersion: 2
-        x: 1099
-        y: 663
-        width: 450
-        height: 821
+        x: 584
+        y: 0
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -281,12 +281,12 @@ TextureImporter:
       name: HojaDisparoColor_8
       rect:
         serializedVersion: 2
-        x: 1599
-        y: 664
-        width: 433
-        height: 820
+        x: 1168
+        y: 0
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -302,12 +302,12 @@ TextureImporter:
       name: HojaDisparoColor_9
       rect:
         serializedVersion: 2
-        x: 2106
-        y: 660
-        width: 440
-        height: 824
+        x: 1752
+        y: 0
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -323,12 +323,12 @@ TextureImporter:
       name: HojaDisparoColor_10
       rect:
         serializedVersion: 2
-        x: 2620
-        y: 664
-        width: 408
-        height: 820
+        x: 2336
+        y: 0
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -344,12 +344,12 @@ TextureImporter:
       name: HojaDisparoColor_11
       rect:
         serializedVersion: 2
-        x: 3069
-        y: 662
-        width: 439
-        height: 822
+        x: 2920
+        y: 0
+        width: 584.6667
+        height: 877
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
