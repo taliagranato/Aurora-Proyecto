@@ -404,6 +404,7 @@
 "Assets/Scripts/Game/Score.cs"
 "Assets/Scripts/Game/SpriteRotation.cs"
 "Assets/Scripts/Game/Weapon.cs"
+"Assets/Scripts/Menu/EndText.cs"
 "Assets/Scripts/Menu/FadeOut.cs"
 "Assets/Scripts/Menu/MainMenu.cs"
 "Assets/Scripts/Menu/Options/Brightness.cs"

@@ -10,6 +10,7 @@ public class Weapon : MonoBehaviour
     private LineRenderer lineRenderer;
     public int lineSegmentCount = 20; // Número de segmentos en la línea de predicción
     public float predictionTime = 2f; // Tiempo de predicción de la trayectoria
+    public GameObject Camera;
 
     private void Awake()
     {
@@ -35,7 +36,7 @@ public class Weapon : MonoBehaviour
     private void CalculateBulletTrajectory()
     {
         Vector3 startPosition = this.transform.position;
-        Vector3 startVelocity = this.transform.forward * 11.5f; // Ajustar la velocidad inicial según sea necesario
+        Vector3 startVelocity = Camera.transform.forward * 40; // Ajustar la velocidad inicial según sea necesario
         float timeStep = predictionTime / lineSegmentCount;
         Vector3 gravity = Physics.gravity;
 
@@ -44,7 +45,7 @@ public class Weapon : MonoBehaviour
         for (int i = 0; i < lineSegmentCount; i++)
         {
             float t = i * timeStep;
-            Vector3 position = startPosition + startVelocity * t + 0.5f * gravity * t * t;
+            Vector3 position = startPosition + startVelocity * t +  0.5f * gravity * t * t;
             lineRenderer.SetPosition(i, position);
         }
     }

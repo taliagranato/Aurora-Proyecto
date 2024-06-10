@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Score : MonoBehaviour
 {
     public int score;
-    public int enemysDead;
+    public int enemiesKilled;
+    public TMP_Text scoreText;
 
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
-        enemysDead = 0;
+        enemiesKilled = 0;
         UpdateScore();
     }
 
@@ -30,16 +32,17 @@ public class Score : MonoBehaviour
     private void UpdateScore()
     {
         PlayerPrefs.SetInt("score", score);
+        scoreText.text = "Puntos: " + score;
     }
     public void AddEnemyCount()
     {
-        enemysDead ++;
-        Debug.Log(" Enemigos eliminados: " + enemysDead);
-        PlayerPrefs.SetInt("enemys", enemysDead);
+        enemiesKilled ++;
+        Debug.Log(" Enemigos eliminados: " + enemiesKilled);
+        PlayerPrefs.SetInt("kills", enemiesKilled);
     }
-    public int GetEnemys()
+    public int GetEnemies()
     { 
-        return PlayerPrefs.GetInt("enemys");
+        return PlayerPrefs.GetInt("kills");
     }
 
     public int GetScore()

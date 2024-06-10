@@ -278,6 +278,7 @@ MonoBehaviour:
   color: {fileID: 2100000, guid: d053df8f7562a984ca10aed19cf6c1e8, type: 2}
   rb: {fileID: 2166914985883729592}
   speed: 1000
-  damage: 10
+  damage: 5
+  is_special: 0
+  explosion_distance: 0
   paint: {fileID: 4014822434866457179, guid: e7c730ea7e2cc73489e724ee6eaae088, type: 3}
-  splash_audio: {fileID: 7664695548274798081}

@@ -133,7 +133,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1463092518204860365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +149,7 @@ MonoBehaviour:
   color: {fileID: 2100000, guid: d053df8f7562a984ca10aed19cf6c1e8, type: 2}
   rb: {fileID: 8283721048796847387}
   speed: 5000
-  damage: 30
+  damage: 20
   is_special: 1
   explosion_distance: 10
   paint: {fileID: 4014822434866457179, guid: e7c730ea7e2cc73489e724ee6eaae088, type: 3}

@@ -44,6 +44,7 @@ public class Player : Character
 
     //Animation
     public Animator player_animator;
+    float moveDirectionX;
 
     //Sounds
     public AudioSource shoot_audio;
@@ -90,21 +91,22 @@ public class Player : Character
         base.Start();
         InitializeBulletSprites();
         StartCoroutine(SpecialBulletTimer());
-        pauseScript = GameObject.FindObjectOfType<Pause>();  
+        pauseScript = GameObject.FindObjectOfType<Pause>();
+        volume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
+        volume.profile.TryGet(out color_adjustments);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //color_adjustments.saturation.value = saturation;
+        color_adjustments.saturation.value = saturation;
         if (!pauseScript.isPaused)
         {
-            player_animator.SetBool("shoot", false);
             if (CanFire() && Input.GetKeyDown(KeyCode.Mouse0) && !recharging && !player_animator.GetBool("jump") && player_animator.GetBool("landing"))
             {
                 if (bullet_active > 0)
                 {
-                    player_animator.SetBool("shoot", true);
+                    StartCoroutine(AnimationDuration("shoot", 0.5f));
                     Fire();
                     bullet_active--;
                     UpdateBulletUI();
@@ -123,18 +125,28 @@ public class Player : Character
             if (_thirdPersonController != null)
             {
                 // Obtener la dirección del movimiento del ThirdPersonController
-                float moveDirectionX = _thirdPersonController.MoveDirection.x;
+                moveDirectionX = _thirdPersonController.MoveDirection.x;
                 
                 // Escalar el sprite del jugador según la dirección del movimiento
                 if (moveDirectionX > 0) // Movimiento hacia la derecha
                 {
-                    //ScalePlayerAndFirePoint(1);
                     _spriteRenderer.flipX = true;
                 }
-                else if (moveDirectionX < 0) // Movimiento hacia la izquierda
+                else if (moveDirectionX <= 0) // Movimiento hacia la izquierda
                 {
-                    // ScalePlayerAndFirePoint(moveDirectionX);
-                    _spriteRenderer.flipX = false;
+                    //ScalePlayerAndFirePoint(moveDirectionX);
+
+                    if (player_animator.GetBool("shoot"))
+                    {
+                        _spriteRenderer.flipX = true;
+                    }
+                    else
+                    {
+                        _spriteRenderer.flipX = false;
+                    }
+
+
+                    
                 }
             }
 
@@ -216,9 +228,17 @@ public class Player : Character
         firing = 0;
     }
 
+    IEnumerator AnimationDuration(string name, float time)
+    {
+        player_animator.SetBool(name, true);
+        yield return new WaitForSeconds(time);
+        player_animator.SetBool(name, false);
+    }
+
     // Triggers and collisions
     private void OnTriggerStay(Collider other)
     {
+        
         if (other.tag == "Water")
         {
             StartCoroutine(Respawn(10));
@@ -241,6 +261,7 @@ public class Player : Character
             interaction_text.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
             {
+                StartCoroutine(AnimationDuration("interact",0.65f));
                 interaction_text.SetActive(false);
                 CollectibleCollected(other);
             }
@@ -250,6 +271,7 @@ public class Player : Character
     {
         end_text.SetActive(false);
         interaction_text.SetActive(false);
+        
     }
 
     // Cuando se colecciona un collectible:
