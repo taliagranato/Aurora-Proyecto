@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 // Script que gestiona el menu principal
 
 public class MainMenu : MonoBehaviour
 {
+    public VideoPlayer videoPlayer;
     public GameObject optionsWindow;
     public GameObject controlsWindow;
 //public GameObject creditsWindow;
     private bool windowsActive = false; // Variable para controlar el estado de las ventanas
+    private bool videoStarted = false;
+    public GameObject screen;
+    public AudioSource audioSource;
 
 
     // Start is called before the first frame update
@@ -35,15 +40,36 @@ public class MainMenu : MonoBehaviour
                 OptionsOn();
             }
         }
-
+        if (videoPlayer != null)
+        {
+            if (videoPlayer.isPlaying)
+            {
+                screen.SetActive(true);
+                videoStarted = true;
+            }
+            else
+            {
+                if (videoStarted)
+                {
+                    SceneManager.LoadScene(1);
+                }
+                else
+                {
+                    screen.SetActive(false);
+                }
+            }
+        }
     }
 
     // Método que hace el fade y carga la escena 01
     public void StartGame()
     {
+        audioSource.Pause();
         FadeOut fadeScript = FindObjectOfType<FadeOut>();
         Debug.Log("Empieza el juego");
-        fadeScript.StartFade("Game");
+        fadeScript.StartFade(); 
+        screen.SetActive(true);
+        videoPlayer.Play();
     }
     // Método que hace el fade y carga la escena 01
     public void Menu()

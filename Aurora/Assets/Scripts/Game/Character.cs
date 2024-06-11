@@ -16,6 +16,7 @@ public class Character : MonoBehaviour
     public Score score;
 
     // Player
+    public AudioSource damageAudio;
     public bool playerBool;
     protected Vector3 initialPos;// variable que guarda la posición inicial del jugador
     public int scoreAmmount;
@@ -78,6 +79,7 @@ public class Character : MonoBehaviour
     {
         if (!isInvulnerable) // Solo aplica daño si el jugador no es invulnerable
         {
+            damageAudio.Play();
             hp -= damage;
             IsDead();
             StartCoroutine(InvulnerabilityRoutine());
@@ -113,7 +115,7 @@ public class Character : MonoBehaviour
 
             if (other.tag == "Damage")
             {
-                TakeDamage(10); // Aplica daño y activa la invulnerabilidad
+                TakeDamage(20); // Aplica daño y activa la invulnerabilidad
                 Debug.Log("Hp: " + hp);
             }
             if (other.tag == "Enemy")

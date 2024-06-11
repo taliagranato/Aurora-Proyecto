@@ -26,6 +26,7 @@ public class Score : MonoBehaviour
     public void RemoveScore(int ammount)
     {
         score -= ammount;
+        if (score < 0) score = 0;
         UpdateScore();
     }
 

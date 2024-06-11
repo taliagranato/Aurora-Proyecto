@@ -136,6 +136,7 @@ public class Enemy : Character
     public void Damage(int damage)
     {
         hp -= damage;
+        damageAudio.Play();
         this.IsDead();
     }
 }
