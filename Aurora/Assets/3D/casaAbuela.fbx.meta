@@ -1,34 +1,9 @@
 fileFormatVersion: 2
-guid: 29e6ef484813ffd429efc84489276498
+guid: afe297884c4c4a545afd991e358b5d63
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Casa, porche
-    second: {fileID: 2100000, guid: 9129fff3068b60e4ba7a2202a251b43c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material #5
-    second: {fileID: 2100000, guid: 9129fff3068b60e4ba7a2202a251b43c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Piedra
-    second: {fileID: 2100000, guid: 6e2cfea932458444288b8b4209bee4ec, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Techado puerta, cubierta tejado, aro ventana frontal
-    second: {fileID: 2100000, guid: 4d3e7be7d2ecdeb459f69b0eca8ab180, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Tejados
-    second: {fileID: 2100000, guid: 91be9e8e6e54aa0469a8b545b688e1fa, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

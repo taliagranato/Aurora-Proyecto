@@ -111,40 +111,20 @@ public class Character : MonoBehaviour
         if (playerBool)
         {
 
-            if (other.tag == "Water")
-            {
-                //StartCoroutine(RespawnWater());
-            }
             if (other.tag == "Damage")
             {
-                TakeDamage(5); // Aplica daño y activa la invulnerabilidad
+                TakeDamage(10); // Aplica daño y activa la invulnerabilidad
                 Debug.Log("Hp: " + hp);
             }
             if (other.tag == "Enemy")
             {
-                TakeDamage(10); // Aplica daño y activa la invulnerabilidad
+                TakeDamage(15); // Aplica daño y activa la invulnerabilidad
                 Debug.Log("Hp: " + hp);
             }
         }
 
     }
 
-    // Corrutinas
-    /*
-    IEnumerator Respawn()
-    {
-        // Esperar un pequeño tiempo antes de mover al jugador para asegurar que la animación de muerte se complete
-        yield return new WaitForSeconds(1.0f);
-
-        // Mover al jugador de vuelta a la posición inicial
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            Debug.Log("Respawning player at initial position: " + initialPos);
-            hp = hp_max;
-            player.transform.position = initialPos;
-        }
-    }*/
 
     IEnumerator InvulnerabilityRoutine()
     {

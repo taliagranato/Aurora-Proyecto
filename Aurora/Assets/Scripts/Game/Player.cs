@@ -241,7 +241,7 @@ public class Player : Character
         
         if (other.tag == "Water")
         {
-            StartCoroutine(Respawn(10));
+            StartCoroutine(Respawn(0));
         }
 
 
